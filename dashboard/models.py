@@ -22,7 +22,7 @@ class AuthorizedViewer(models.Model):
     patients = models.ManyToManyField(Patient)
 
 
-class Records(models.Model):
+class Record(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="records")
     time_recorded = models.DateTimeField(auto_now=True)
 
