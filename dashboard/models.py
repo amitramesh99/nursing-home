@@ -7,7 +7,7 @@ class Facility(models.Model):
     name = models.CharField(max_length=200)
 
 class StaffMember(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staffMember')
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE, related_name="staffMembers")
 
 class Patient(models.Model):
