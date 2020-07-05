@@ -22,5 +22,6 @@ from dashboard import views as dashboard_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', dashboard_views.home, name='home')
+    path('', dashboard_views.home, name='home'),
+    path('patient/<int:patientId>/', dashboard_views.patient_profile, name='profile')
 ]
