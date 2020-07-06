@@ -27,7 +27,7 @@ def patient_profile(request, patientId):
     try:
         patient = Patient.objects.get(id=patientId)
     except Patient.DoesNotExist:
-        return HttpResponse("Patient Not Found")
+        patient = None
 
     facility = nurse.facility
 

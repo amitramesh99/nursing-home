@@ -6,9 +6,16 @@ from django.contrib.auth.models import User
 class Facility(models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class StaffMember(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staffMember')
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE, related_name="staffMembers")
+
+    def __str__(self):
+        return self.user.name
+
 
 class Patient(models.Model):
     name = models.CharField(max_length=50)
@@ -23,6 +30,8 @@ class AuthorizedViewer(models.Model):
     # phone number
     patients = models.ManyToManyField(Patient)
 
+    def __str__(self):
+        return self.user.name
 
 
 # Daily Metric models:
@@ -124,7 +133,8 @@ class Medication(models.Model):
     active = models.BooleanField(default=True)
     days = models.ManyToManyField(Day, related_name='days')
 
-
+    def __str__(self):
+        return "%s (%s)" % (self.name, self.dosage)
 
 # Lab Work
 class LabWork(models.Model):
