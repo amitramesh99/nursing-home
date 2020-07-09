@@ -68,7 +68,16 @@
       </div>
       <div class="col pt-3">
         {% block main %}
-        <p>No Patient Selected</p>
+		<div align="center">
+      <h3>Create Patient</h3>
+      <form action="/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+      </form>
+		</div>
         {% endblock %}
       </div>
     </div>

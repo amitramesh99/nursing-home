@@ -11,6 +11,11 @@ def is_nurse(user):
 def home(request):
     facility = StaffMember.objects.get(id=request.user.staffMember.id).facility
 
+    if request.method == 'POST':
+        name = request.POST.get('your_name')
+        patient = Patient(name=name, facility=facility)
+        patient.save()
+
     search_query = request.GET.get('q', '')
     patient_list = Patient.objects.filter(name__contains=search_query, facility=facility.id)
 
@@ -34,9 +39,18 @@ def patient_profile(request, patientId):
     search_query = request.GET.get('q', '')
     patient_list = Patient.objects.filter(name__contains=search_query)
 
+    activity_list = ActivityEntry.objects.filter(patient=patient)
+    daily_living_list = DailyActivityOption.objects.all()
+    medications = Medication.objects.filter(patient=patient)
+
+    print(activity_list)
+
 
     return render(request, 'dashboard/patient_profile.html', {
         'facility': facility,
         'patient_list': patient_list,
         'patient': patient,
+        'activity_list': activity_list,
+        'daily_living_list': daily_living_list,
+        'medications': medications
     })

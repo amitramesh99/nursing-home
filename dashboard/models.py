@@ -14,7 +14,7 @@ class StaffMember(models.Model):
     facility = models.ForeignKey(Facility, on_delete=models.CASCADE, related_name="staffMembers")
 
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 
 class Patient(models.Model):
@@ -118,7 +118,7 @@ class DailyActivitiesEntry(MetricEntry):
         return str(self.activities.all())
 
 class Day(models.Model):
-    name = models.CharField(max_length=8)
+    name = models.CharField(max_length=9)
 
     def __str__(self):
         return self.name

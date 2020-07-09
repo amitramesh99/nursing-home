@@ -33,3 +33,7 @@ a.header-link:focus,{
 .patient-list{
   overflow-y: auto;
 }
+
+.daily-section{
+  background-color: #8fb8ff;
+}
