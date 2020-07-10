@@ -43,7 +43,12 @@ def patient_profile(request, patientId):
     daily_living_list = DailyActivityOption.objects.all()
     medications = Medication.objects.filter(patient=patient)
 
-    print(activity_list)
+
+    metric_models = [BloodSugarEntry, BloodPresureEntry, PulseEntry, TemperatureEntry, WeightEntry]
+
+    daily_metrics = []
+    for model in metric_models:
+        daily_metrics.append(model.objects.filter(patient=patientId).latest('created_at'))
 
 
     return render(request, 'dashboard/patient_profile.html', {
@@ -52,5 +57,6 @@ def patient_profile(request, patientId):
         'patient': patient,
         'activity_list': activity_list,
         'daily_living_list': daily_living_list,
-        'medications': medications
+        'medications': medications,
+        'metrics': daily_metrics
     })

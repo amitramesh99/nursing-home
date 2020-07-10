@@ -5,56 +5,77 @@
 
 <div class="container-fluid">
   {% if patient %}
-  <div align="center">
-    <div class="bg-light">
-      <h3>{{ patient.name }}</h3>
-    </div>
+  <div class="m-2">
+    <h1>{{ patient.name }}</h1>
+  </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <div class="jumbotron p-4 p-md-8 rounded">
-          <h1 class="display-4">Metrics</h1>
-          <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="d-flex w-100 justify-content-between card-body">
+          <h2>Metrics</h2>
           <button class="btn btn-lg btn-dark">Update</button>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="jumbotron p-4 p-md-8 text-white rounded bg-dark">
-          <h1 class="display-4">Recent Activities</h1>
-          {% for activity in activity_list %}
-            <p align="left" class="lead my-3">{{activity}}</p>
-            <p align="left" class="lead my-3">{{activity.created_at}}</p>
+        <ul class="list-group list-group-flush">
+          {% for metric in metrics %}
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col">
+                <h5 class="mb-1">{{ metric.LABEL }}</h5>
+                <small class="text-muted">Last Updated {{ metric.created_at }}</small>
+              </div>
+              <div class="col-md-5 my-auto">
+                <h5 class="mb-0">{{ metric.entry }} <small>{{ metric.unit }}</small></h5>
+              </div>
+            </div>
+          </li>
           {% endfor %}
-          <button class="btn btn-lg btn-light">Add</button>
-        </div>
+        </ul>
       </div>
     </div>
-
-    <div class="jumbotron p-4 p-md-8 rounded text-white daily-section">
-      <h1 class="display-4">Daily Section</h1>
-      <div class="row">
-        <div class="col-md-6">
-            <h1>Medications</h1>
-              {% for medication in medications %}
-              <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-              <label class="form-check-label" for="defaultCheck1">
-                {{medication}}
-              </label>
-              </div>
-              {% endfor %}
+    <div class="col-md-6">
+      <div class="card">
+        <div class="d-flex w-100 justify-content-between card-body">
+          <h2>Recent Activities</h2>
+          <button class="btn btn-lg btn-dark">Add New</button>
         </div>
-        <div class="col-md-6">
-            <h1>Living</h1>
-            {% for item in daily_living_list %}
+        <ul class="list-group list-group-flush">
+          {% for activity in activity_list %}
+          <li class="list-group-item activity-entry intensity-{{activity.intensity}}">
+            <h5 class="mb-1">{{ activity.name }}</h5>
+            <small class="text-muted">Latest Updated {{ activity.created_at }}</small>
+            <p class="mb-0">{{ activity.description }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="jumbotron p-4 p-md-8 rounded text-white daily-section">
+    <h1 class="display-4">Daily Section</h1>
+    <div class="row">
+      <div class="col-md-6">
+          <h1>Medications</h1>
+            {% for medication in medications %}
             <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
             <label class="form-check-label" for="defaultCheck1">
-              {{item}}
+              {{medication}}
             </label>
             </div>
             {% endfor %}
-        </div>
+      </div>
+      <div class="col-md-6">
+          <h1>Living</h1>
+          {% for item in daily_living_list %}
+          <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+          <label class="form-check-label" for="defaultCheck1">
+            {{item}}
+          </label>
+          </div>
+          {% endfor %}
       </div>
     </div>
   </div>

@@ -9,17 +9,17 @@ a.header-link:focus,{
   text-decoration: none;
 }
 
-.list-group-item{
+.patient-list > .list-group-item{
   background-color: inherit;
 }
 
-.list-group-item:hover{
+.patient-list > .list-group-item:hover{
   background-color: #8fb8ff;
   color: white;
 
 }
 
-.current-item{
+.patient-list > .current-item{
   background-color: #78a9ff;
   color: white;
 }
@@ -36,4 +36,20 @@ a.header-link:focus,{
 
 .daily-section{
   background-color: #8fb8ff;
+}
+
+.list-group-item.activity-entry{
+  border-left-width: 10px;
+}
+
+.list-group-item.activity-entry.intensity-l{
+  border-left-color: #009933;
+}
+
+.list-group-item.activity-entry.intensity-m{
+  border-left-color: #ff9900;
+}
+
+.list-group-item.activity-entry.intensity-a{
+  border-left-color: #cc3300;
 }
