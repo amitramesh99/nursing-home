@@ -25,8 +25,12 @@ SECRET_KEY = 'd9emwmc!p$fj#wg_ojo68kmfd%%xj%80nf6#jvptcf)50d^rd1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'amitr.pythonanywhere.com',
+    'acrusis.com',
+    'www.acrusis.com'
+    ]
 
 # Application definition
 
