@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.conf.urls.static import static
 
 from dashboard import views as dashboard_views
 
@@ -25,3 +26,6 @@ urlpatterns = [
     path('', dashboard_views.home, name='home'),
     path('patient/<int:patientId>/', dashboard_views.patient_profile, name='profile')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
