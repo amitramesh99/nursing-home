@@ -48,7 +48,10 @@ def patient_profile(request, patientId):
 
     daily_metrics = []
     for model in metric_models:
-        daily_metrics.append(model.objects.filter(patient=patientId).latest('created_at'))
+        try:
+            daily_metrics.append(model.objects.filter(patient=patientId).latest('created_at'))
+        except:
+            pass
 
 
     return render(request, 'dashboard/patient_profile.html', {
