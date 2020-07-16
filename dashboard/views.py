@@ -27,6 +27,34 @@ def home(request):
 
 @user_passes_test(is_nurse)
 def patient_profile(request, patientId):
+    if request.method == 'POST':
+        medication_entries = request.POST.getlist('medications')
+
+        try:
+            m = MedicationEntry.objects.get(patient_id=patientId)
+            m.medications.clear()
+        except:
+            m = MedicationEntry(patient_id=patientId)
+            m.save()
+
+        for entry in medication_entries:
+            med = Medication.objects.get(id=entry)
+            m.medications.add(med)
+
+        living_entries = request.POST.getlist('living')
+
+        try:
+            e = DailyActivitiesEntry.objects.get(patient_id=patientId)
+            e.activities.clear()
+        except:
+            e = DailyActivitiesEntry(patient_id=patientId)
+            e.save()
+
+        for entry in living_entries:
+            option = DailyActivityOption.objects.get(id=entry)
+            e.activities.add(option)
+
+
     nurse = StaffMember.objects.get(id=request.user.staffMember.id)
 
     try:
@@ -40,11 +68,19 @@ def patient_profile(request, patientId):
     patient_list = Patient.objects.filter(name__contains=search_query)
 
     activity_list = ActivityEntry.objects.filter(patient=patient)
+
     daily_living_list = DailyActivityOption.objects.all()
+
+    try:
+        daily_living_completed = set(DailyActivitiesEntry.objects.filter(patient=patientId).values_list('activities', flat=True))
+    except:
+        daily_living_completed = []
+
     medications = Medication.objects.filter(patient=patient)
-
-    print(activity_list)
-
+    try:
+        medications_taken = set(MedicationEntry.objects.filter(patient=patientId).values_list('medications', flat=True))
+    except:
+        medications_taken = []
 
     return render(request, 'dashboard/patient_profile.html', {
         'facility': facility,
@@ -52,5 +88,7 @@ def patient_profile(request, patientId):
         'patient': patient,
         'activity_list': activity_list,
         'daily_living_list': daily_living_list,
-        'medications': medications
+        'daily_living_completed': daily_living_completed,
+        'medications': medications,
+        'medications_taken': medications_taken
     })

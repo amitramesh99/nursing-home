@@ -136,6 +136,13 @@ class Medication(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.dosage)
 
+class MedicationEntry(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medication_entries')
+    medications = models.ManyToManyField(Medication, related_name='selected_medications')
+
+    def __str__(self):
+        return str(self.medications.all())
+
 # Lab Work
 class LabWork(models.Model):
     created_at = models.DateTimeField(auto_now=True)
