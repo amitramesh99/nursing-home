@@ -76,6 +76,15 @@ def patient_profile(request, patientId):
     except:
         daily_living_completed = []
 
+    metric_models = [BloodSugarEntry, BloodPresureEntry, PulseEntry, TemperatureEntry, WeightEntry]
+
+    daily_metrics = []
+    for model in metric_models:
+        try:
+            daily_metrics.append(model.objects.filter(patient=patientId).latest('created_at'))
+        except:
+            pass
+
     medications = Medication.objects.filter(patient=patient)
     try:
         medications_taken = set(MedicationEntry.objects.filter(patient=patientId).values_list('medications', flat=True))
@@ -90,5 +99,6 @@ def patient_profile(request, patientId):
         'daily_living_list': daily_living_list,
         'daily_living_completed': daily_living_completed,
         'medications': medications,
-        'medications_taken': medications_taken
+        'medications_taken': medications_taken,
+        'metrics': daily_metrics
     })

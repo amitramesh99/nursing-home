@@ -36,6 +36,7 @@ class AuthorizedViewer(models.Model):
 
 # Daily Metric models:
 class MetricEntry(models.Model):
+    LABEL = ''
     UNIT = ''
 
     created_at = models.DateTimeField(auto_now=True)
@@ -55,9 +56,11 @@ class MetricEntry(models.Model):
 
 
 class BloodSugarEntry(MetricEntry):
+    LABEL = 'Blood Sugar'
     UNIT = 'mg/dL'
 
 class BloodPresureEntry(MetricEntry):
+    LABEL = 'Blood Pressure'
     UNIT = 'mm Hg'
 
     systolic = models.SmallIntegerField()
@@ -68,15 +71,23 @@ class BloodPresureEntry(MetricEntry):
         return "%d/%d" % (self.systolic, self.diastolic)
 
 class PulseEntry(MetricEntry):
+    LABEL = 'Pulse'
     UNIT = 'bpm'
 
 class TemperatureEntry(MetricEntry):
+    LABEL = 'Body Temperature'
     UNIT = '˚F'
 
+    entry = models.FloatField()
+
+
 class WeightEntry(MetricEntry):
+    LABEL = 'Weight'
     UNIT = 'lb'
 
 class SkinAssesmentEntry(MetricEntry):
+    LABEL = 'Skin Assesment'
+
     entry = models.TextField()
 
 

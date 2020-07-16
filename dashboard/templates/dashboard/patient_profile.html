@@ -5,62 +5,88 @@
 
 <div class="container-fluid">
   {% if patient %}
-  <div align="center">
-    <div class="bg-light">
-      <h3>{{ patient.name }}</h3>
-    </div>
+  <div class="m-2">
+    <h1>{{ patient.name }}</h1>
+  </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <div class="jumbotron p-4 p-md-8 rounded">
-          <h1 class="display-4">Metrics</h1>
-          <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="d-flex w-100 justify-content-between card-body">
+          <h2>Metrics</h2>
           <button class="btn btn-lg btn-dark">Update</button>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="jumbotron p-4 p-md-8 text-white rounded bg-dark">
-          <h1 class="display-4">Recent Activities</h1>
-          {% for activity in activity_list %}
-            <p align="left" class="lead my-3">{{activity}}</p>
-            <p align="left" class="lead my-3">{{activity.created_at}}</p>
+        <ul class="list-group list-group-flush">
+          {% for metric in metrics %}
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col">
+                <h5 class="mb-1">{{ metric.LABEL }}</h5>
+                <small class="text-muted">Last Updated {{ metric.created_at }}</small>
+              </div>
+              <div class="col-md-5 my-auto">
+                <h5 class="mb-0">{{ metric.entry }} <small>{{ metric.unit }}</small></h5>
+              </div>
+            </div>
+          </li>
           {% endfor %}
-          <button class="btn btn-lg btn-light">Add</button>
-        </div>
+        </ul>
       </div>
     </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="d-flex w-100 justify-content-between card-body">
+          <h2>Recent Activities</h2>
+          <button class="btn btn-lg btn-dark">Add New</button>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for activity in activity_list %}
+          <li class="list-group-item activity-entry intensity-{{activity.intensity}}">
+            <h5 class="mb-1">{{ activity.name }}</h5>
+            <small class="text-muted">Latest Updated {{ activity.created_at }}</small>
+            <p class="mb-0">{{ activity.description }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 
-    <div class="jumbotron p-4 p-md-8 rounded text-white daily-section">
-      <h1 class="display-4">Daily Section</h1>
-      <form action="{% url 'profile' patient.id %}" method="post">
-        {% csrf_token %}
-        <div class="row">
-          <div class="col-md-6">
-            <h1>Medications</h1>
-            {% for medication in medications %}
-            <div class="form-check">
-              <input class="form-check-input" {% if medication.id in medications_taken %} checked {% endif %} type="checkbox" name="medications" id="{{medication.name}}" value="{{medication.id}}">
-              <label class="form-check-label" for="{{medication.name}}">{{medication}}</label>
+
+  <div class="row">
+    <div class="col">
+      <div class="jumbotron p-4 p-md-8 rounded text-white daily-section">
+        <h1 class="display-4">Daily Section</h1>
+        <form action="{% url 'profile' patient.id %}" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <h1>Medications</h1>
+              {% for medication in medications %}
+              <div class="form-check">
+                <input class="form-check-input" {% if medication.id in medications_taken %} checked {% endif %} type="checkbox" name="medications" id="{{medication.name}}" value="{{medication.id}}">
+                <label class="form-check-label" for="{{medication.name}}">{{medication}}</label>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="col-md-6">
-            <h1>Living</h1>
-            {% for item in daily_living_list %}
-            <div class="form-check">
-              <input class="form-check-input" {% if item.id in daily_living_completed %} checked {% endif %} type="checkbox" name="living" id="{{item.name}}" value="{{item.id}}">
-              <label class="form-check-label" for="{{item.name}}">{{item}}</label>
+            <div class="col-md-6">
+              <h1>Living</h1>
+              {% for item in daily_living_list %}
+              <div class="form-check">
+                <input class="form-check-input" {% if item.id in daily_living_completed %} checked {% endif %} type="checkbox" name="living" id="{{item.name}}" value="{{item.id}}">
+                <label class="form-check-label" for="{{item.name}}">{{item}}</label>
+              </div>
+              {% endfor %}
+              <br>
             </div>
-            {% endfor %}
+            <div class="container">
+              <div align="center">
+                <button type="button submit" class="btn btn-light">Update</button>
+              </div>
+            </div>
           </div>
-          <br>
-        </div>
-        <div class="container">
-          <div align="center">
-            <button type="button submit" class="btn btn-light">Update</button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
   {% else %}
