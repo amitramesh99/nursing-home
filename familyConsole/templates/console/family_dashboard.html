@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'dashboard/css/nurse_dashboard.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<header>
+  <nav class="navbar navbar-expand-md navbar-light px-4 shadow-sm">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <strong>Acrusis<span class="text-muted"> beta</span></strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample04">
+
+      <ul class="navbar-nav my-2 my-md-0 ml-auto">
+        <li class="nav-item">
+          Welcome, {{ user.username }}! <a href="{% url 'logout' %}" class="nav-link d-inline">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main role="main">
+  <div style="width:70%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto">
+    <div class="row">
+      <div class="col-2 px-0 bg border-right">
+        <div class="pt-3 sticky-top">
+          <ul class="list-group rounded-0 patient-list">
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/dashboard/' %}current-item{% endif %}" href="{% url 'dashboard' %}" style="font-size:20px;font-weight:bold;">Home</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/alerts/' %}current-item{% endif %}" href="{% url 'dashboard' %}" style="font-size:20px;font-weight:bold;">Alerts</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/metrics/' %}current-item{% endif %}" href="{% url 'metrics' %}" style="font-size:20px;font-weight:bold;">Health Metrics</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/medications/' %}current-item{% endif %}" href="{% url 'medications' %}" style="font-size:20px;font-weight:bold;">Medications</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/activities/' %}current-item{% endif %}" href="{% url 'activities' %}" style="font-size:20px;font-weight:bold;">Activities</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/messages/' %}current-item{% endif %}" href="{% url 'activities' %}" style="font-size:20px;font-weight:bold;">Messages</a>
+          </ul>
+        </div>
+      </div>
+      <div class="col pt-3">
+        {% block main %}
+    		<div align="center">
+          <h3>Create Patient</h3>
+          <form action="/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+    		</div>
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
+{% endblock %}

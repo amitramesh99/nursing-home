@@ -20,12 +20,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from dashboard import views as dashboard_views
+from familyConsole import views as family_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', dashboard_views.home, name='home'),
-    path('patient/<int:patientId>/', dashboard_views.patient_profile, name='profile')
+    path('patient/<int:patientId>/', dashboard_views.patient_profile, name='profile'),
+    path('dashboard/', family_views.dashboard, name='dashboard'),
+    path('medications/', family_views.medications, name='medications'),
+    path('metrics/', family_views.metrics, name='metrics'),
+    path('activities/', family_views.activities, name='activities')
 ]
 
 if settings.DEBUG:
