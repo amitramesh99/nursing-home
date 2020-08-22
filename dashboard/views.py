@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.urls import reverse
 from .models import *
-
+import json
 # Create your views here.
 
 def is_nurse(user):
@@ -16,13 +17,14 @@ def home(request):
         patient = Patient(name=name, facility=facility)
         patient.save()
 
-    search_query = request.GET.get('q', '')
-    patient_list = Patient.objects.filter(name__contains=search_query, facility=facility.id)
+    patient_list = Patient.objects.filter(facility=facility.id)
+    patient_list_json = json.dumps([patient.as_dict() for patient in patient_list])
 
     return render(request, 'dashboard/nurse_dashboard.html', {
         'facility': facility,
         'patient_list': patient_list,
-        'search_query': search_query
+        'search_query': search_query,
+        'patient_list_json': patient_list_json,
     })
 
 @user_passes_test(is_nurse)
@@ -64,8 +66,8 @@ def patient_profile(request, patientId):
 
     facility = nurse.facility
 
-    search_query = request.GET.get('q', '')
-    patient_list = Patient.objects.filter(name__contains=search_query)
+    patient_list = Patient.objects.filter(facility=facility.id)
+    patient_list_json = json.dumps([patient.as_dict() for patient in patient_list])
 
     activity_list = ActivityEntry.objects.filter(patient=patient)
 
@@ -94,6 +96,7 @@ def patient_profile(request, patientId):
     return render(request, 'dashboard/patient_profile.html', {
         'facility': facility,
         'patient_list': patient_list,
+        'patient_list_json': patient_list_json,
         'patient': patient,
         'activity_list': activity_list,
         'daily_living_list': daily_living_list,

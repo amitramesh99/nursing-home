@@ -28,7 +28,7 @@
   </nav>
 </header>
 
-<main role="main">
+<main role="main" id="app">
   <div class="container-fluid">
     <div class="row">
       <div class="col-3 px-0 bg-light">
@@ -39,45 +39,22 @@
             </h3>
           </div>
 
-          <form id="patient-search">
-            <div class="input-group mt-4">
-              <input type="text" class="form-control form-control-lg rounded-0" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" value="{{ search_query }}" name="q">
-              <div class="form-group-append">
-                <button class="btn btn-lg btn-secondary rounded-0" type="submit" id="button-addon2"><span class="fa fa-search"></span></button>
-              </div>
-            </div>
-          </form>
+          <patient-search></patient-search>
 
-          {% if patient_list %}
-          <ul class="list-group rounded-0 patient-list">
-
-            {% for patient in patient_list %}
-            {% url 'profile' patientId=patient.id as link_url %}
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == link_url %}current-item{% endif %}" href="{% url 'profile' patient.id %}">{{ patient.name }}</a>
-            {% endfor %}
-          </ul>
-
-          {% else %}
-
-          <div class="p-3">
-            <p class="font-italic">No patients found</p>
-          </div>
-
-          {% endif %}
         </div>
       </div>
       <div class="col pt-3">
         {% block main %}
-		<div align="center">
-      <h3>Create Patient</h3>
-      <form action="/" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
-      </form>
-		</div>
+          <div align="center">
+            <h3>Create Patient</h3>
+            <form action="/" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
+              </div>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+          </div>
         {% endblock %}
       </div>
     </div>
@@ -95,4 +72,44 @@
 
 {% block scripts %}
 <script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
+<script src="https://unpkg.com/vue"></script>
+<script type='text/javascript'>
+    var patients = {{ patient_list_json|safe }};
+  </script>
+<script type="text/javascript">
+  Vue.component('patient-search', {
+    delimiters: ['[[', ']]'],
+    data: function(){
+      return{
+        patients: patients,
+        query: '',
+      }
+    },
+    computed: {
+      filteredPatients: function() {
+        if(this.query === ''){
+          return this.patients;
+        }
+
+        return this.patients.filter((patient) => {
+          return patient.name.toLowerCase()
+          .includes(this.query.toLowerCase());
+        })
+      }
+    },
+    template: `
+      <div>
+        <div class="input-group mt-4">
+          <input type="text" class="form-control form-control-lg rounded-0" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="q" v-model="query">
+        </div>
+        <ul class="list-group rounded-0 patient-list">
+          <a v-for="patient in filteredPatients" class="list-group-item list-group-item-action border-0" :href="patient.profile_url">[[ patient.name ]]</a>
+        </ul>
+      </div>
+    `,
+  });
+  const app = new Vue({
+    el: '#app',
+  });
+</script>
 {% endblock %}

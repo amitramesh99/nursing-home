@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 # User and Auth models:
@@ -23,6 +24,14 @@ class Patient(models.Model):
 
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "profile_url": reverse('profile', args=[self.id]),
+            "facility": self.facility.id
+        }
 
 class AuthorizedViewer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
