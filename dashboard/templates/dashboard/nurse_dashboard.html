@@ -9,8 +9,8 @@
 {% block content %}
 
 <header>
-  <nav class="navbar navbar-expand-md navbar-light px-4 shadow-sm">
-    <a class="navbar-brand" href="{% url 'home' %}">
+  <nav class="navbar navbar-expand-md navbar-dark bg-black px-4 shadow-sm">
+    <a class="navbar-brand" href="{% url 'nurse-dashboard' %}">
       <strong>Acrusis<span class="text-muted"> beta</span></strong>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,11 +28,11 @@
   </nav>
 </header>
 
-<main role="main" id="app">
+<main role="main">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3 px-0 bg-light">
-        <div class="pt-3 sticky-top">
+      <div class="col-3 px-0 sidebar">
+        <div class="pt-3 sticky-top" id="patient-search">
           <div class="px-4">
             <h3>
               <a href="{% url 'home' %}" class="header-link">{{ facility.name }}</a>
@@ -43,7 +43,7 @@
 
         </div>
       </div>
-      <div class="col pt-3">
+      <div class="col p-0 bg-light">
         {% block main %}
           <div align="center">
             <h3>Create Patient</h3>
@@ -74,8 +74,8 @@
 <script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
 <script src="https://unpkg.com/vue"></script>
 <script type='text/javascript'>
-    var patients = {{ patient_list_json|safe }};
-  </script>
+  var patients = {{ patient_list_json|safe }};
+</script>
 <script type="text/javascript">
   Vue.component('patient-search', {
     delimiters: ['[[', ']]'],
@@ -100,7 +100,7 @@
     template: `
       <div>
         <div class="input-group mt-4">
-          <input type="text" class="form-control form-control-lg rounded-0" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="q" v-model="query">
+          <input type="text" class="form-control form-control-lg rounded-0 border-0 input-dark" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="q" v-model="query">
         </div>
         <ul class="list-group rounded-0 patient-list">
           <a v-for="patient in filteredPatients" class="list-group-item list-group-item-action border-0" :href="patient.profile_url">[[ patient.name ]]</a>
@@ -108,8 +108,8 @@
       </div>
     `,
   });
-  const app = new Vue({
-    el: '#app',
+  const patientSearchWidget = new Vue({
+    el: '#patient-search',
   });
 </script>
 {% endblock %}

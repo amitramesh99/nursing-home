@@ -34,7 +34,7 @@ class Patient(models.Model):
         }
 
 class AuthorizedViewer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='authorizedViewer')
     # email
     # phone number
     patients = models.ManyToManyField(Patient)

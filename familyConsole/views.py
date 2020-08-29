@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from dashboard.models import *
 
 # Create your views here.
@@ -29,3 +29,6 @@ def activities(request):
     return render(request, 'console/activities.html', {
         'activity_list': activity_list
     })
+
+def chat(request):
+    return HttpResponse("Family chat view goes here")
