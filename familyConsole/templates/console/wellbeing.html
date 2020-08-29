@@ -1,0 +1,51 @@
+{% extends 'console/family_dashboard.html' %}
+{% load static %}
+
+{% block main %}
+<div class="row">
+  <div class="col container">
+    <div class="card">
+      <div class="d-flex w-100 justify-content-between card-body">
+        <h2>Recent Activities</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for activity in activity_list %}
+        <li class="list-group-item activity-entry intensity-{{activity.intensity}}">
+          <h5 class="mb-1">{{ activity.name }}</h5>
+          <small class="text-muted">Latest Updated {{ activity.created_at }}</small>
+          <p class="mb-0">{{ activity.description }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col container">
+    <div class="card">
+      <div class="d-flex w-100 justify-content-between card-body">
+        <h2>Nutrition</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h5 class="mb-1">Diet:
+                <small>Low Fat</small>
+              </h5>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h5 class="mb-1">Method of Eating:
+                <small>Assisted</small>
+              </h5>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
