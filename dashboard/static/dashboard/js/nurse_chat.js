@@ -116,7 +116,6 @@ Vue.component('chat', {
         <div class="card mb-2 mx-2" v-for="message in messages">
           <div class="card-body">
             <h6 class="card-subtitle mb-2">
-              <span class="fa fa-user-md"></span>
               [[message.author]]
               <small class="text-muted">[[ message.dateCreated | timeFromNow ]]</small></h6>
             <p class="card-text">[[ message.body ]]</p>
