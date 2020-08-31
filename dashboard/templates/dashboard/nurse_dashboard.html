@@ -60,9 +60,9 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col footer p-4">
-      <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col footer p-4">
         <p>© Acrusis 2020</p>
       </div>
     </div>
@@ -100,7 +100,7 @@
     template: `
       <div>
         <div class="input-group mt-4">
-          <input type="text" class="form-control form-control-lg rounded-0 border-0 input-dark" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="q" v-model="query">
+          <input type="text" class="form-control form-control-lg rounded-0 border-0 input-dark" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="search-patients" v-model="query">
         </div>
         <ul class="list-group rounded-0 patient-list">
           <a v-for="patient in filteredPatients" class="list-group-item list-group-item-action border-0" :href="patient.profile_url">[[ patient.name ]]</a>

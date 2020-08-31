@@ -11,7 +11,7 @@
 {{ block.super }}
 
 <script type='text/javascript'>
-  var patient = {{ patient | safe }};
+  var patient = {{ patient_json | safe }};
   var chatId = "{{ chat_id }}";
 </script>
 
