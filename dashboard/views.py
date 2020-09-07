@@ -1,14 +1,29 @@
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.urls import reverse
 from .models import *
+import json
+from twilio.jwt.access_token import AccessToken
+from twilio.jwt.access_token.grants import ChatGrant
 
+from nursingHome.settings import TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET, TWILIO_CHAT_SERVICE_SID
 # Create your views here.
 
 def is_nurse(user):
     return hasattr(user, 'staffMember')
 
-@user_passes_test(is_nurse)
+@login_required
 def home(request):
+    if hasattr(request.user, 'staffMember'):
+        return redirect('nurse-dashboard')
+
+    if hasattr(request.user, 'authorizedViewer'):
+        return redirect('family-dashboard')
+
+    return HttpResponse('Error: User is not nurse or family member') # todo: handle this case
+
+@user_passes_test(is_nurse)
+def nurse_dashboard(request):
     facility = StaffMember.objects.get(id=request.user.staffMember.id).facility
 
     if request.method == 'POST':
@@ -16,17 +31,17 @@ def home(request):
         patient = Patient(name=name, facility=facility)
         patient.save()
 
-    search_query = request.GET.get('q', '')
-    patient_list = Patient.objects.filter(name__contains=search_query, facility=facility.id)
+    patient_list = Patient.objects.filter(facility=facility.id)
+    patient_list_json = json.dumps([patient.as_dict() for patient in patient_list])
 
     return render(request, 'dashboard/nurse_dashboard.html', {
         'facility': facility,
-        'patient_list': patient_list,
-        'search_query': search_query
+        'patient_list_json': patient_list_json,
     })
 
 @user_passes_test(is_nurse)
 def patient_profile(request, patientId):
+    print(request.POST)
     if request.method == 'POST':
         medication_entries = request.POST.getlist('medications')
 
@@ -54,7 +69,6 @@ def patient_profile(request, patientId):
             option = DailyActivityOption.objects.get(id=entry)
             e.activities.add(option)
 
-
     nurse = StaffMember.objects.get(id=request.user.staffMember.id)
 
     try:
@@ -64,8 +78,8 @@ def patient_profile(request, patientId):
 
     facility = nurse.facility
 
-    search_query = request.GET.get('q', '')
-    patient_list = Patient.objects.filter(name__contains=search_query)
+    patient_list = Patient.objects.filter(facility=facility.id)
+    patient_list_json = json.dumps([patient.as_dict() for patient in patient_list])
 
     activity_list = ActivityEntry.objects.filter(patient=patient)
 
@@ -93,7 +107,7 @@ def patient_profile(request, patientId):
 
     return render(request, 'dashboard/patient_profile.html', {
         'facility': facility,
-        'patient_list': patient_list,
+        'patient_list_json': patient_list_json,
         'patient': patient,
         'activity_list': activity_list,
         'daily_living_list': daily_living_list,
@@ -102,3 +116,35 @@ def patient_profile(request, patientId):
         'medications_taken': medications_taken,
         'metrics': daily_metrics
     })
+
+@user_passes_test(is_nurse)
+def patient_chat(request, patientId):
+    facility = StaffMember.objects.get(id=request.user.staffMember.id).facility
+    patient_list = Patient.objects.filter(facility=facility.id)
+    patient_list_json = json.dumps([patient.as_dict() for patient in patient_list])
+
+    try:
+        patient = Patient.objects.get(id=patientId)
+        patient_json = json.dumps(patient.as_dict())
+    except Patient.DoesNotExist:
+        patient_json = ''
+
+
+    return render(request, 'dashboard/nurse_chat.html', {
+        'facility': facility,
+        'patient_list_json': patient_list_json,
+        'chat_id': f'patient-{patientId}',
+        'patient': patient_json,
+    })
+
+def get_token(request):
+    twilio_token = AccessToken(
+        TWILIO_ACCOUNT_SID,
+        TWILIO_API_KEY,
+        TWILIO_API_SECRET,
+        identity=request.user.username)
+
+    chat_grant = ChatGrant(service_sid=TWILIO_CHAT_SERVICE_SID)
+    twilio_token.add_grant(chat_grant)
+
+    return HttpResponse(twilio_token.to_jwt().decode('UTF-8'))

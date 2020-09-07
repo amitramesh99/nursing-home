@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from dashboard.models import *
 
 # Create your views here.
@@ -30,7 +30,6 @@ def activities(request):
         'activity_list': activity_list
     })
 
-
 def vital_hub(request):
     metric_models = [BloodSugarEntry, BloodPresureEntry, PulseEntry, TemperatureEntry, WeightEntry]
     daily_metrics = []
@@ -54,3 +53,6 @@ def wellbeing(request):
     return render(request, 'console/wellbeing.html', {
         'activity_list': activity_list
     })
+
+def chat(request):
+    return HttpResponse("Family chat view goes here")

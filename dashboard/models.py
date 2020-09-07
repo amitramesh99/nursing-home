@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 # User and Auth models:
@@ -24,8 +25,16 @@ class Patient(models.Model):
     def __str__(self):
         return self.name
 
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "profile_url": reverse('profile', args=[self.id]),
+            "facility": self.facility.id
+        }
+
 class AuthorizedViewer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='authorizedViewer')
     # email
     # phone number
     patients = models.ManyToManyField(Patient)
@@ -166,3 +175,14 @@ class UserUploadedDocument(models.Model):
 
     def __str__(self):
         return document.name
+
+class NoteEntry(models.Model):
+    created_at = models.DateTimeField(auto_now=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='%(class)s')
+
+    notes = models.TextField(blank=True, default='')
+    category = models.CharField(max_length=10)
+    severity = models.CharField(max_length=10)
+
+    def __str__(self):
+        return "[%s] %s: %s" % (self.severity, self.patient, self.category)

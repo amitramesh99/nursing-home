@@ -22,17 +22,32 @@ from django.conf.urls.static import static
 from dashboard import views as dashboard_views
 from familyConsole import views as family_views
 
+from nursingHome.api import views as api_views
+
 urlpatterns = [
+    # django urls
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', dashboard_views.home, name='home'),
-    path('patient/<int:patientId>/', dashboard_views.patient_profile, name='profile'),
-    path('dashboard/', family_views.dashboard, name='dashboard'),
-    path('vital-hub/', family_views.vital_hub, name='vitalHub'),
-    path('wellbeing/', family_views.wellbeing, name='wellbeing'),
-    path('medications/', family_views.medications, name='medications'),
-    path('metrics/', family_views.metrics, name='metrics'),
-    path('activities/', family_views.activities, name='activities')
+
+    path('token/', dashboard_views.get_token, name='token'),
+
+    # nurse view
+    path('dashboard/', dashboard_views.nurse_dashboard, name='nurse-dashboard'),
+    path('dashboard/patient/<int:patientId>/', dashboard_views.patient_profile, name='profile'),
+    path('dashboard/patient/<int:patientId>/chat', dashboard_views.patient_chat, name='patient-chat'),
+
+    # family view
+    path('portal/', family_views.dashboard, name='family-dashboard'),
+    path('portal/vitals', family_views.vital_hub, name='vital_hub'),
+    path('portal/wellbeing', family_views.wellbeing, name='wellbeing'),
+    path('portal/medications/', family_views.medications, name='medications'),
+    path('portal/metrics/', family_views.metrics, name='metrics'),
+    path('portal/activities/', family_views.activities, name='activities'),
+    path('portal/chat/', family_views.chat, name='family-chat'),
+
+    path('api/patients/', include(('nursingHome.api.urls', 'nursingHome'), namespace='api-patients'))
+    #path('api/patients/', api_views.patient_create, name='api-patients')
 ]
 
 if settings.DEBUG:

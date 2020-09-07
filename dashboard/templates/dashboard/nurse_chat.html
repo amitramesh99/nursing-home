@@ -1,0 +1,22 @@
+{% extends 'dashboard/nurse_dashboard.html' %}
+{% load static %}
+
+{% block main %}
+<div class="" id="chat">
+  <chat></chat>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script type='text/javascript'>
+  var patient = {{ patient | safe }};
+  var chatId = "{{ chat_id }}";
+</script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://media.twiliocdn.com/sdk/js/chat/releases/4.0.0/twilio-chat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="{% static 'dashboard/js/nurse_chat.js' %}"></script>
+{% endblock %}

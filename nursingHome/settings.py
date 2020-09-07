@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'dashboard',
     'familyConsole'
 ]
@@ -72,6 +73,17 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
 
 WSGI_APPLICATION = 'nursingHome.wsgi.application'
 
@@ -128,3 +140,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+
+# Twilio API Keys:
+# Required for all uses
+TWILIO_ACCOUNT_SID="AC627853f68a221479b6c9e901f259a6d1"
+TWILIO_API_KEY="SK99d6b22b9d639f614a8a09c6f48b7718"
+TWILIO_API_SECRET="YMA9xuMle2xQsWV32Kax2dQEtew8TJqV"
+
+# Required for Chat
+TWILIO_CHAT_SERVICE_SID="ISe4a5752a14344ecc8681fb388930ad0d"
+
+# Required for Notify
+# TWILIO_NOTIFICATION_SERVICE_SID=
+
+# Optional for Sync
+# By default, this app will use the default instance for your account (named "default").
+# TWILIO_SYNC_SERVICE_SID=

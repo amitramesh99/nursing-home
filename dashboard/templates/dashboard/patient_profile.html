@@ -16,11 +16,10 @@
           <h2 class="">Daily Section</h2>
         </div>
         <div class="card-body">
-          <form action="{% url 'profile' patient.id %}" method="post">
-            {% csrf_token %}
-            <div class="row">
-              <div class="col-6">
-
+          <div class="row">
+            <div class="col-6">
+              <form action="{% url 'profile' patient.id %}" method="post">
+                {% csrf_token %}
                 <div class="form-group row">
                   <div class="col-sm-4"><h4>Medications</h4></div>
                   <div class="col-sm-8">
@@ -48,7 +47,7 @@
                 <div class="form-group row">
                   <div class="col-sm-3"><h4>Meals</h4></div>
                   <div class="col-sm-3">
-                    <div class="form-check" align="center">
+                    <div class="form-check">
                       <h6>Breakfast</h6>
                       <div>
                         <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
@@ -69,7 +68,7 @@
                     </div>
                   </div>
                   <div class="col-sm-3">
-                    <div class="form-check" align="center">
+                    <div class="form-check">
                       <h6>Lunch</h6>
                       <div>
                         <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
@@ -90,7 +89,7 @@
                     </div>
                   </div>
                   <div class="col-sm-3">
-                    <div class="form-check" align="center">
+                    <div class="form-check">
                       <h6>Dinner</h6>
                       <div>
                         <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
@@ -114,38 +113,64 @@
 
                 <button type="submit" class="btn btn-dark btn">Update</button>
 
-              </div>
+              </form>
+            </div>
 
 
-              <div class="col-6">
-                <div class="mb-3">
-                  <label for="validationTextarea"><h4>General Notes</h4></label>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="validationTextarea"><h4>General Notes</h4></label>
 
-                  <div class="list-group mb-3">
+                <div class="list-group mb-3">
 
-                    <div class="list-group-item">
-                      <div class="d-flex w-100 justify-content-between">
-                        <small class="mb-1">Entered by John Doe</small>
-                        <small>11:24 a.m.</small>
-                      </div>
-                      <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <small class="mb-1">Entered by John Doe</small>
+                      <small>11:24 a.m.</small>
                     </div>
-
-                    <div class="list-group-item">
-                      <div class="d-flex w-100 justify-content-between">
-                        <small class="mb-1">Entered by Johnny Appleseed</small>
-                        <small>9:43 a.m.</small>
-                      </div>
-                      <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                    </div>
-
+                    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
                   </div>
-                  <textarea class="form-control" id="validationTextarea" placeholder="Patient notes..."></textarea>
+
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <small class="mb-1">Entered by Johnny Appleseed</small>
+                      <small>9:43 a.m.</small>
+                    </div>
+                    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                  </div>
+
                 </div>
-                <button type="submit" class="btn btn-dark btn">Add Note</button>
+                <form action="{% url 'profile' patient.id %}" method="post">
+                  {% csrf_token %}
+                  <textarea class="form-control" id="validationTextarea" name="description" placeholder="Patient notes..."></textarea>
+                  <br>
+                  <div class="row">
+                    <div class="col">
+                      <select class="custom-select required-field" id="category" name="category">
+                        <option selected>Choose Category...</option>
+                        <option value="Activities">Activities</option>
+                        <option value="Living">Living</option>
+                        <option value="Meals">Meals</option>
+                        <option value="Medications">Medications</option>
+                        <option value="Vitals">Vitals</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <select class="custom-select" id="severity" name="severity">
+                        <option selected>Choose Severity...</option>
+                        <option value="Low">Low</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="High">High</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+                  <button type="submit" class="btn btn-dark btn">Add Note</button>
+                </form>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -153,7 +178,7 @@
   <div class="row mb-5">
     <div class="col-4">
       <div class="list-group" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Metrics</a>
+        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Vitals</a>
         <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Activities</a>
         <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Patient Profile</a>
       </div>
@@ -163,7 +188,7 @@
         <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
           <div class="card mb-4">
             <div class="d-flex w-100 justify-content-between card-body">
-              <h2>Metrics</h2>
+              <h2>Vitals</h2>
               <button class="btn btn-lg btn-dark">Update</button>
             </div>
             <ul class="list-group list-group-flush">
