@@ -46,7 +46,7 @@ Vue.component('chat', {
       return moment();
     },
     refreshToken: function() {
-      return axios.get('/token').then((response) => this.token = response.data);
+      return axios.get('/token/chat').then((response) => this.token = response.data);
     },
     createOrJoinChannel: function() {
       console.log('Attempting to join chat channel...', );
@@ -80,11 +80,19 @@ Vue.component('chat', {
         console.log("User has not joined channel");
         this.channel.join().then((channel) => {
           console.log('Joined channel');
+          this.getPrevMessages();
         });
       }
       else{
         console.log("User already joined");
+        this.getPrevMessages();
       }
+
+      // Listen for new messages sent to the channel
+      this.channel.on('messageAdded', (message) => this.messages.push(message));
+      console.log("Listening for new messages");
+    },
+    getPrevMessages: function(){
       // Get Messages for a previously created channel
       console.log("Retrieving previous messages...");
       this.channel.getMessages().then((messages) => {
@@ -92,10 +100,6 @@ Vue.component('chat', {
         this.messages.push(...messages.items);
       })
       .catch((err) => console.log(err));
-
-      // Listen for new messages sent to the channel
-      this.channel.on('messageAdded', (message) => this.messages.push(message));
-      console.log("Listening for new messages");
     },
     messageFormSubmit: function(e){
       e.preventDefault();
@@ -111,9 +115,9 @@ Vue.component('chat', {
     }
   },
   template: `
-    <div class="pt-2">
-      <div ref="messageContainer" style="max-height: 500px; overflow:auto">
-        <div class="card mb-2 mx-2" v-for="message in messages">
+    <div class="bg-white">
+      <div ref="messageContainer" style="height: 500px; overflow:auto" class="pt-2">
+        <div class="card mb-2 mx-2 bg-light" v-for="message in messages">
           <div class="card-body">
             <h6 class="card-subtitle mb-2">
               [[message.author]]
@@ -122,16 +126,18 @@ Vue.component('chat', {
           </div>
         </div>
       </div>
-      <form @submit="messageFormSubmit" class="">
-        <div class="input-group">
-          <input v-model=messageInput placeholder="Send a message" class="form-control form-control-lg rounded-0 border-top"></input>
-          <div class="input-group-append">
-            <button class="btn btn-primary rounded-0" type="button">
-              <span class="fa fa-paper-plane"></span>
-            </button>
+      <div class="border-top">
+        <form @submit="messageFormSubmit" class="" autocomplete="off">
+          <div class="input-group">
+            <input v-model=messageInput placeholder="Send a message" class="form-control form-control-lg rounded-0 border-0" autocomplete="new-password" name="chat-message"></input>
+            <div class="input-group-append">
+              <button class="btn btn-primary rounded-0" type="submit">
+                <span class="fa fa-paper-plane"></span>
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   `,
 });

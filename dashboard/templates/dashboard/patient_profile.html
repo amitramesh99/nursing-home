@@ -12,8 +12,8 @@
   <div class="row">
     <div class="col">
       <div class="card mb-4">
-        <div class="card-header">
-          <h2 class="">Daily Section</h2>
+        <div class="d-flex w-100 justify-content-between card-body border-bottom">
+          <h2>Daily Section</h2>
         </div>
         <div class="card-body">
           <div class="row">
@@ -140,9 +140,9 @@
                   </div>
 
                 </div>
-                <form action="{% url 'profile' patient.id %}" method="post">
+                <form action="{% url 'api-patients:notes' patient.id %}" method="post">
                   {% csrf_token %}
-                  <textarea class="form-control" id="validationTextarea" name="description" placeholder="Patient notes..."></textarea>
+                  <textarea class="form-control" id="validationTextarea" name="notes" placeholder="Patient notes..."></textarea>
                   <br>
                   <div class="row">
                     <div class="col">
@@ -176,14 +176,25 @@
     </div>
   </div>
   <div class="row mb-5">
-    <div class="col-4">
-      <div class="list-group" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Vitals</a>
+
+    <div class="col-6">
+      <div class="" id="chat">
+        <div class="card">
+          <div class="d-flex w-100 justify-content-between card-body border-bottom">
+            <h2>Chat</h2>
+          </div>
+
+          <chat></chat>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="list-group list-group-horizontal mb-2 text-center" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Metrics</a>
         <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Activities</a>
         <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Patient Profile</a>
       </div>
-    </div>
-    <div class="col-8">
+
       <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
           <div class="card mb-4">
@@ -282,4 +293,18 @@
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script type='text/javascript'>
+  var patient = {{ patient_json | safe }};
+  var chatId = "{{ chat_id }}";
+</script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://media.twiliocdn.com/sdk/js/chat/releases/4.0.0/twilio-chat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="{% static 'dashboard/js/nurse_chat.js' %}"></script>
 {% endblock %}

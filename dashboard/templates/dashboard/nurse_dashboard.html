@@ -45,12 +45,12 @@
       </div>
       <div class="col p-0 bg-light">
         {% block main %}
-          <div align="center">
+          <div align="center" class="mt-4">
             <h3>Create Patient</h3>
-            <form action="/" method="post">
+            <form action="{% url 'api-patients:create-patient' %}" method="post">
               {% csrf_token %}
               <div class="form-group">
-                <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
+                <input id="your_name" class="form-control" type="text" name="name" placeholder="Name" value="{{ current_name }}" style="width:50%">
               </div>
               <button type="submit" class="btn btn-primary">Create</button>
             </form>
@@ -60,9 +60,9 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col footer p-4">
-      <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col footer p-4">
         <p>© Acrusis 2020</p>
       </div>
     </div>
@@ -100,7 +100,7 @@
     template: `
       <div>
         <div class="input-group mt-4">
-          <input type="text" class="form-control form-control-lg rounded-0 border-0 input-dark" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="q" v-model="query">
+          <input type="text" class="form-control form-control-lg rounded-0 border-0 input-dark" placeholder="Search Patients" aria-label="Recipient's username" aria-describedby="button-addon2" name="search-patients" v-model="query">
         </div>
         <ul class="list-group rounded-0 patient-list">
           <a v-for="patient in filteredPatients" class="list-group-item list-group-item-action border-0" :href="patient.profile_url">[[ patient.name ]]</a>

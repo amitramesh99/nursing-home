@@ -47,7 +47,6 @@ urlpatterns = [
     path('portal/chat/', family_views.chat, name='family-chat'),
 
     path('api/patients/', include(('nursingHome.api.urls', 'nursingHome'), namespace='api-patients'))
-    #path('api/patients/', api_views.patient_create, name='api-patients')
 ]
 
 if settings.DEBUG:

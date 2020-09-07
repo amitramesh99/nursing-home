@@ -14,7 +14,6 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteEntry
         fields = [
-            'pk',
             'patient',
             'notes',
             'category',

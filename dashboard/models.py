@@ -40,7 +40,7 @@ class AuthorizedViewer(models.Model):
     patients = models.ManyToManyField(Patient)
 
     def __str__(self):
-        return self.user.name
+        return self.user.username
 
 
 # Daily Metric models:

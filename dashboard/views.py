@@ -73,8 +73,10 @@ def patient_profile(request, patientId):
 
     try:
         patient = Patient.objects.get(id=patientId)
+        patient_json = json.dumps(patient.as_dict())
     except Patient.DoesNotExist:
         patient = None
+        patient_json = ''
 
     facility = nurse.facility
 
@@ -114,7 +116,9 @@ def patient_profile(request, patientId):
         'daily_living_completed': daily_living_completed,
         'medications': medications,
         'medications_taken': medications_taken,
-        'metrics': daily_metrics
+        'metrics': daily_metrics,
+        'chat_id': f'patient-{patientId}',
+        'patient_json': patient_json,
     })
 
 @user_passes_test(is_nurse)
@@ -134,7 +138,7 @@ def patient_chat(request, patientId):
         'facility': facility,
         'patient_list_json': patient_list_json,
         'chat_id': f'patient-{patientId}',
-        'patient': patient_json,
+        'patient_json': patient_json,
     })
 
 def get_token(request):
