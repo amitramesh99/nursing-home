@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'dashboard/css/video_chat.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<div id="video-chat">
+  <video-chat></video-chat>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://unpkg.com/vue"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script src="//media.twiliocdn.com/sdk/js/video/releases/1.14.0/twilio-video.min.js"></script>
+
+<!-- <script src="//media.twiliocdn.com/sdk/js/video/releases/2.7.2/twilio-video.min.js"></script> -->
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script> -->
+
+<script src="{% static 'dashboard/js/video_chat.js' %}"></script>
+{% endblock %}

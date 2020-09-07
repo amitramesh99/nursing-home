@@ -2,7 +2,7 @@ Vue.component('chat', {
   delimiters: ['[[', ']]'],
   data: function(){
     return{
-      token: '',
+      token: null,
       chatClient: null,
       channel: {
         'friendlyName': 'Loading Chat...',
