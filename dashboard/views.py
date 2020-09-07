@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import *
 import json
 from twilio.jwt.access_token import AccessToken
-from twilio.jwt.access_token.grants import ChatGrant
+from twilio.jwt.access_token.grants import ChatGrant, VideoGrant
 
 from nursingHome.settings import TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET, TWILIO_CHAT_SERVICE_SID
 # Create your views here.
@@ -141,7 +141,11 @@ def patient_chat(request, patientId):
         'patient_json': patient_json,
     })
 
-def get_token(request):
+
+def video_conference(request):
+    return render(request, 'dashboard/video_chat.html')
+
+def get_chat_token(request):
     twilio_token = AccessToken(
         TWILIO_ACCOUNT_SID,
         TWILIO_API_KEY,
@@ -150,5 +154,18 @@ def get_token(request):
 
     chat_grant = ChatGrant(service_sid=TWILIO_CHAT_SERVICE_SID)
     twilio_token.add_grant(chat_grant)
+
+    return HttpResponse(twilio_token.to_jwt().decode('UTF-8'))
+
+def get_video_token(request):
+    twilio_token = AccessToken(
+        TWILIO_ACCOUNT_SID,
+        TWILIO_API_KEY,
+        TWILIO_API_SECRET,
+        identity=request.user.username)
+
+    # Create a Video grant and add to token
+    video_grant = VideoGrant()
+    twilio_token.add_grant(video_grant)
 
     return HttpResponse(twilio_token.to_jwt().decode('UTF-8'))

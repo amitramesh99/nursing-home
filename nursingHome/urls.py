@@ -30,7 +30,10 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', dashboard_views.home, name='home'),
 
-    path('token/', dashboard_views.get_token, name='token'),
+    path('token/chat', dashboard_views.get_chat_token, name='chat-token'),
+    path('token/video', dashboard_views.get_video_token, name='video-token'),
+
+    path('video/', dashboard_views.video_conference, name='video'),
 
     # nurse view
     path('dashboard/', dashboard_views.nurse_dashboard, name='nurse-dashboard'),
