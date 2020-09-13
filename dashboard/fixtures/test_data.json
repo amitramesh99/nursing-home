@@ -36,6 +36,60 @@
     }
 },
 {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$uspzS75bQqNe$mQLlFS6kcJnB8TOiqHTUHFTjLsR+03YBjzKFzqxqN7s=",
+        "last_login": "2020-07-05T03:17:09Z",
+        "is_superuser": false,
+        "username": "vedant",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-07-05T03:12:11Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$uspzS75bQqNe$mQLlFS6kcJnB8TOiqHTUHFTjLsR+03YBjzKFzqxqN7s=",
+        "last_login": "2020-07-05T03:17:09Z",
+        "is_superuser": false,
+        "username": "chloe",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-07-05T03:12:11Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$uspzS75bQqNe$mQLlFS6kcJnB8TOiqHTUHFTjLsR+03YBjzKFzqxqN7s=",
+        "last_login": "2020-07-05T03:17:09Z",
+        "is_superuser": false,
+        "username": "nidhi",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-07-05T03:12:11Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "dashboard.facility",
     "pk": 1,
     "fields": {
@@ -59,9 +113,25 @@
 },
 {
     "model": "dashboard.staffmember",
+    "pk": 2,
+    "fields": {
+        "user": 3,
+        "facility": 1
+    }
+},
+{
+    "model": "dashboard.staffmember",
+    "pk": 3,
+    "fields": {
+        "user": 4,
+        "facility": 1
+    }
+},
+{
+    "model": "dashboard.staffmember",
     "pk": 4,
     "fields": {
-        "user": 2,
+        "user": 5,
         "facility": 1
     }
 },
