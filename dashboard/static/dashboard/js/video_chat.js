@@ -7,6 +7,8 @@ Vue.component('video-chat', {
       VID: '',
       VIDInput: '',
       previewTracks: null,
+      isMuted: false,
+      isVideoOff: false,
       activeRoom: {
         participants: {},
         state: '',
@@ -167,17 +169,61 @@ Vue.component('video-chat', {
         this.activeRoomChangeTracker += 1;
         console.log('Left');
         this.detachParticipantTracks(room.localParticipant);
-        room.participants.forEach(detachParticipantTracks);
-        this.activeRoom = null;
+        room.participants.forEach(this.detachParticipantTracks);
+        Object.assign(this.$data, this.$options.data.apply(this));
+        this.refreshToken();
         // document.getElementById('button-join').style.display = 'inline';
         // document.getElementById('button-leave').style.display = 'none';
       });
     },
 
-
     leaveRoomIfJoined: function(){
       // todo
       alert("Leaving call");
+    },
+
+    //Controls:
+    getButtonClass: function(isActive){
+      return isActive ? 'btn-danger': 'btn-success';
+    },
+
+    toggleMute: function(){
+      let audioTracks = this.activeRoom.localParticipant.audioTracks;
+
+      if(this.isMuted){
+        audioTracks.forEach(function(track, trackId) {
+          track.enable();
+        });
+      }
+      else{
+        audioTracks.forEach(function(track, trackId) {
+          track.disable();
+        });
+      }
+
+      this.isMuted = !this.isMuted;
+    },
+
+    toggleVideo: function(){
+      let videoTracks = this.activeRoom.localParticipant.videoTracks;
+
+      if(this.isVideoOff){
+        videoTracks.forEach(function(track, trackId) {
+          track.enable();
+        });
+      }
+      else{
+        videoTracks.forEach(function(track, trackId) {
+          track.disable();
+        });
+      }
+
+      this.isVideoOff = !this.isVideoOff;
+    },
+
+    leaveCall: function(){
+      console.log("Leaving call...");
+      this.activeRoom.disconnect();
     },
   },
   computed: {
@@ -188,14 +234,6 @@ Vue.component('video-chat', {
       // }
       console.log(this.activeRoom.localParticipant);
       return this.activeRoomChangeTracker && Array.from(this.activeRoom.participants.values());
-    }
-  },
-  watch: {
-    activeRoom: function(val){
-      console.log("Change in room obj");
-      console.log(this.activeRoom);
-      console.log(this.activeRoom.localParticipant);
-      return true;
     }
   },
   mounted: function(){
@@ -228,6 +266,18 @@ Vue.component('video-chat', {
             <div id="previewVideoContainer">
               <video-stream v-bind:participant="activeRoom.localParticipant"></video-stream>
             </div>
+            <div id="videoControlsContainer" class="justify-content-between">
+              <button class="btn btn-lg" @click="toggleMute" :class="getButtonClass(isMuted)">
+                <span class="fa fa-microphone-slash"></span>
+              </button>
+              <button class="btn btn-lg" @click="toggleVideo" :class="getButtonClass(isVideoOff)">
+                <span class="fa fa-video-camera"></span>
+              </button>
+              <button class="btn btn-lg btn-secondary" @click="leaveCall">
+                <span class="fa fa-times"></span>
+              </button>
+
+              </div>
           </div>
         </div>
       </div>

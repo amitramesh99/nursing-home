@@ -17,6 +17,13 @@
 #videoControlsContainer{
   position: fixed;
   bottom: 20px;
+  left: 0px;
+  right: 0px;
+  width: 165px;
   margin: 0px auto;
+  display: flex;
+}
 
+#videoControlsContainer button{
+  border-radius: 0px;
 }
