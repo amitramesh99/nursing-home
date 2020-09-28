@@ -236,9 +236,6 @@ Vue.component('video-chat', {
       return this.activeRoomChangeTracker && Array.from(this.activeRoom.participants.values());
     }
   },
-  mounted: function(){
-    console.log(this.activeRoom);
-  },
   template: `
     <div class="container-fluid h-100">
       <div v-if="!activeRoom.state" class="row h-100 align-items-center">
@@ -317,17 +314,21 @@ Vue.component('video-grid', {
   // * Video keeps resizing during call
   // * Video not taking up full size of container
   template: `
-    <div class="d-flex h-100 align-items-center justify-content-center">
+    <div class="h-100">
       <div class="row" v-for="row in participantMatrix">
         <div class="col" v-for="participant in row">
-          <video-stream v-bind:participant="participant"></video-stream>
+          <div class="embed-responsive embed-responsive-16by9">
+            <video-stream v-bind:participant="participant"></video-stream>
+          </div>
         </div>
       </div>
-      <div v-if="displayWaitingMessage" class="mx-auto">
+      <div v-if="displayWaitingMessage" class="h-100 d-flex align-items-center justify-content-center">
         <h3 class="text-light">Waiting for participants to join...</h3>
       </div>
     </div>
   `,
+  
+
 });
 
 Vue.component('video-stream', {
@@ -341,6 +342,7 @@ Vue.component('video-stream', {
     },
   },
   mounted: function(){
+    console.log("Mounted video stream");
     if(this.participant){
       let container = this.$refs[this.participant.identity];
       let tracks = Array.from(this.participant.tracks.values());
