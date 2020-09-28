@@ -141,7 +141,7 @@ def patient_chat(request, patientId):
         'patient_json': patient_json,
     })
 
-
+@login_required
 def video_conference(request):
     return render(request, 'dashboard/video_chat.html')
 

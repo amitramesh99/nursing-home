@@ -20,11 +20,13 @@ Vue.component('chat', {
 
           // when the access token is about to expire, refresh it
           this.chatClient.on('tokenAboutToExpire', () => {
+            console.log("tokenAboutToExpire event fired");
             this.refreshToken();
           });
-
+          
           // if the access token already expired, refresh it
           this.chatClient.on('tokenExpired', () => {
+            console.log("tokenExpired event fired");
             this.refreshToken();
           });
 
@@ -102,7 +104,6 @@ Vue.component('chat', {
       .catch((err) => console.log(err));
     },
     messageFormSubmit: function(e){
-      e.preventDefault();
       if(this.messageInput){
         this.channel.sendMessage(this.messageInput);
         this.messageInput = "";
@@ -127,7 +128,7 @@ Vue.component('chat', {
         </div>
       </div>
       <div class="border-top">
-        <form @submit="messageFormSubmit" class="" autocomplete="off">
+        <form @submit.prevent="messageFormSubmit" autocomplete="off">
           <div class="input-group">
             <input v-model=messageInput placeholder="Send a message" class="form-control form-control-lg rounded-0 border-0" autocomplete="new-password" name="chat-message"></input>
             <div class="input-group-append">
