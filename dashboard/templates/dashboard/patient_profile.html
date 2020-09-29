@@ -20,92 +20,89 @@
             <div class="col-6">
               <form action="{% url 'profile' patient.id %}" method="post">
                 {% csrf_token %}
-                <div class="form-group row">
-                  <div class="col-sm-4"><h4>Medications</h4></div>
-                  <div class="col-sm-8">
-                    {% for medication in medications %}
-                    <div class="form-check">
-                      <input class="form-check-input" {% if medication.id in medications_taken %} checked {% endif %} type="checkbox" name="medications" id="{{medication.name}}" value="{{medication.id}}">
-                      <label class="form-check-label" for="{{medication.name}}">{{medication}}</label>
-                    </div>
-                    {% endfor %}
+
+                <h4>Medications</h4>
+                <div class="form-group">
+                  {% for medication in medications %}
+                  <div class="form-check">
+                    <input class="form-check-input" {% if medication.id in medications_taken %} checked {% endif %} type="checkbox" name="medications" id="{{medication.name}}" value="{{medication.id}}">
+                    <label class="form-check-label" for="{{medication.name}}">{{medication}}</label>
                   </div>
+                  {% endfor %}
                 </div>
 
-                <div class="form-group row">
-                  <div class="col-sm-4"><h4>Living</h4></div>
-                  <div class="col-sm-8">
-                    {% for item in daily_living_list %}
-                    <div class="form-check">
-                      <input class="form-check-input" {% if item.id in daily_living_completed %} checked {% endif %} type="checkbox" name="living" id="{{item.name}}" value="{{item.id}}">
-                      <label class="form-check-label" for="{{item.name}}">{{item}}</label>
-                    </div>
-                    {% endfor %}
+                <h4>Living</h4>
+                <div class="form-group">
+                  {% for item in daily_living_list %}
+                  <div class="form-check">
+                    <input class="form-check-input" {% if item.id in daily_living_completed %} checked {% endif %} type="checkbox" name="living" id="{{item.name}}" value="{{item.id}}">
+                    <label class="form-check-label" for="{{item.name}}">{{item}}</label>
                   </div>
+                  {% endfor %}
                 </div>
 
+                <h4>Meals</h4>
                 <div class="form-group row">
-                  <div class="col-sm-3"><h4>Meals</h4></div>
-                  <div class="col-sm-3">
+                  <div class="col-md-4">
+                    <h6>Breakfast</h6>
                     <div class="form-check">
-                      <h6>Breakfast</h6>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Normal</label>
+                        <input class="form-check-input" type="checkbox" name="breakfast" id="br-normal" value="normal">
+                        <label class="form-check-label" for="br-normal">Normal</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Less</label>
+                        <input class="form-check-input" type="checkbox" name="breakfast" id="br-less" value="less">
+                        <label class="form-check-label" for="br-less">Less</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">More</label>
+                        <input class="form-check-input" type="checkbox" name="breakfast" id="br-more" value="more">
+                        <label class="form-check-label" for="br-more">More</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Missed</label>
+                        <input class="form-check-input" type="checkbox" name="breakfast" id="br-missed" value="missed">
+                        <label class="form-check-label" for="br-missed">Missed</label>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-3">
+                  <div class="col-md-4">
+                    <h6>Lunch</h6>
                     <div class="form-check">
-                      <h6>Lunch</h6>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Normal</label>
+                        <input class="form-check-input" type="checkbox" name="lunch" id="l-normal" value="normal">
+                        <label class="form-check-label" for="l-normal">Normal</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Less</label>
+                        <input class="form-check-input" type="checkbox" name="lunch" id="l-less" value="less">
+                        <label class="form-check-label" for="l-less">Less</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">More</label>
+                        <input class="form-check-input" type="checkbox" name="lunch" id="l-more" value="more">
+                        <label class="form-check-label" for="l-more">More</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Missed</label>
+                        <input class="form-check-input" type="checkbox" name="lunch" id="l-missed" value="missed">
+                        <label class="form-check-label" for="l-missed">Missed</label>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-3">
+                  <div class="col-md-4">
+                    <h6>Dinner</h6>
                     <div class="form-check">
-                      <h6>Dinner</h6>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Normal</label>
+                        <input class="form-check-input" type="checkbox" name="dinner" id="d-normal" value="normal">
+                        <label class="form-check-label" for="d-normal">Normal</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Less</label>
+                        <input class="form-check-input" type="checkbox" name="dinner" id="d-less" value="less">
+                        <label class="form-check-label" for="d-less">Less</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">More</label>
+                        <input class="form-check-input" type="checkbox" name="dinner" id="d-more" value="more">
+                        <label class="form-check-label" for="d-more">More</label>
                       </div>
                       <div>
-                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                        <label class="form-check-label" for="a">Missed</label>
+                        <input class="form-check-input" type="checkbox" name="dinner" id="d-missed" value="missed">
+                        <label class="form-check-label" for="d-missed">Missed</label>
                       </div>
                     </div>
                   </div>
