@@ -7,41 +7,58 @@
 {% endblock %}
 
 {% block content %}
+<div class="bg-dark h-100 d-flex align-items-center justify-content-center">
+  <div class="card login-form">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Sign In to Acrusis</h2>
 
-<div class="login-form">
-  {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
+      {% if next %}
+        {% if user.is_authenticated %}
+        <div class="alert alert-warning" role="alert">
+          Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.
+        </div>
+  
+        {% else %}
+        <div class="alert alert-info" role="alert">
+          Please login to see this page.
+        </div>
+        {% endif %}
+      {% endif %}
+    
+      {% for error in form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ error|escape }}
+      </div>
+      {% endfor %}
 
-  {% if next %}
-  {% if user.is_authenticated %}
-  <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-    {% endif %}
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
 
-    <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-      <table>
-        <tr>
-          <td>{{ form.username.label_tag }}</td>
-          <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-          <td>{{ form.password.label_tag }}</td>
-          <td>{{ form.password }}</td>
-        </tr>
-      </table>
+        <input class="form-control mt-2 {% if form.username.errors %}is-invalid{% endif %}" type="text" name="username" placeholder="Username"></input>
+        {% for error in form.username.errors %}
+        <div class="invalid-feedback">
+          {{ error }}
+        </div>
+        {% endfor %}
+        
+        <input class="form-control mt-2 {% if form.password.errors %}is-invalid{% else %} mb-3{% endif %}" type="password" name="password" placeholder="Password" ></input>
+        {% for error in form.password.errors %}
+        <div class="invalid-feedback mb-3">
+          {{ error }}
+        </div>
+        {% endfor %}
+        
+        <input type="submit" value="Login" class="btn btn-primary">
+        <a href="{% url 'password_reset' %}">Lost password?</a>
 
-      <input type="submit" value="Login" class="btn btn-primary">
-      <input type="hidden" name="next" value="{{ next }}">
-    </form>
+        <input type="hidden" name="next" value="{{ next }}">
 
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+      </form>
+    </div>
+  </div>
 </div>
+
 
 
 {% endblock %}
