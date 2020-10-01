@@ -51,7 +51,7 @@ Vue.component('chat', {
       return axios.get('/token/chat').then((response) => this.token = response.data);
     },
     createOrJoinChannel: function() {
-      console.log('Attempting to join chat channel...', );
+      console.log('Attempting to join chat channel...');
       this.chatClient.getChannelByUniqueName(chatId)
       .then((channel) => {
         this.channel = channel;
