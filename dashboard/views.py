@@ -41,7 +41,6 @@ def nurse_dashboard(request):
 
 @user_passes_test(is_nurse)
 def patient_profile(request, patientId):
-    print(request.POST)
     if request.method == 'POST':
         medication_entries = request.POST.getlist('medications')
 

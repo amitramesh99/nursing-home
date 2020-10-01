@@ -9,7 +9,7 @@
 {% block content %}
 
 <main role="main">
-  <div style="width:70%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto">
+  <div class="container">
     <div class="row">
       <div class="col-2 px-0 bg border-right">
         <div class="pt-3 sticky-top">
@@ -18,22 +18,13 @@
             <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/dashboard/' %}current-item{% endif %}" href="{% url 'family-dashboard' %}" style="font-size:20px;font-weight:bold;">Home</a>
             <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/metrics/' %}current-item{% endif %}" href="{% url 'vital_hub' %}" style="font-size:20px;font-weight:bold;">Health</a>
             <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/medications/' %}current-item{% endif %}" href="{% url 'wellbeing' %}" style="font-size:20px;font-weight:bold;">Wellbeing</a>
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/messages/' %}current-item{% endif %}" href="{% url 'activities' %}" style="font-size:20px;font-weight:bold;">Messages</a>
+            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/communication/' %}current-item{% endif %}" href="{% url 'communication' %}" style="font-size:20px;font-weight:bold;">Communication</a>
           </ul>
         </div>
       </div>
       <div class="col pt-3">
         {% block main %}
-    		<div align="center">
-          <h3>Create Patient</h3>
-          <form action="/" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-          </form>
-    		</div>
+
         {% endblock %}
       </div>
     </div>
@@ -43,5 +34,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
+
 {% endblock %}

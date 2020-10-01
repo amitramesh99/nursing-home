@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from dashboard.models import *
+import json
 
 # Create your views here.
 
@@ -23,11 +24,21 @@ def metrics(request):
         'metrics': daily_metrics
     })
 
-def activities(request):
-    patient = 1
-    activity_list = ActivityEntry.objects.filter(patient=patient)
-    return render(request, 'console/activities.html', {
-        'activity_list': activity_list
+def communication(request):
+    try:
+        # TODO: Handle case of multiple patients
+        patient = request.user.authorizedViewer.patients.first()
+        patientId = patient.id
+        patient_json = json.dumps(patient.as_dict())
+    except Patient.DoesNotExist:
+        patient = None
+        patientId = None
+        patient_json = ''
+
+    return render(request, 'console/communication.html', {
+        'patient_json': patient_json,
+        'chat_id': f'patient-{patientId}',
+
     })
 
 def vital_hub(request):
