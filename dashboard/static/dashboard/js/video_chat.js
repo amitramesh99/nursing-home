@@ -4,7 +4,6 @@ Vue.component('video-chat', {
     return{
       token: null,
       params: {},
-      VID: '',
       VIDInput: '',
       previewTracks: null,
       isMuted: false,
@@ -60,18 +59,6 @@ Vue.component('video-chat', {
     refreshToken: function() {
       return axios.get('/token/video').then((response) => this.token = response.data);
     },
-    attachTracks: function(tracks, container) {
-      tracks.forEach(function(track) {
-        // container.appendChild(track.attach());
-      });
-    },
-    attachParticipantTracks: function(participant, container) {
-      console.log(participant.tracks);
-      console.log(participant.tracks.values());
-
-      var tracks = Array.from(participant.tracks.values());
-      this.attachTracks(tracks, container);
-    },
     detachTracks: function(tracks) {
       tracks.forEach(function(track) {
         track.detach().forEach(function(detachedElement) {
@@ -122,20 +109,6 @@ Vue.component('video-chat', {
       this.activeRoom = room;
 
       console.log("Joined room sucessfully");
-      // document.getElementById('button-join').style.display = 'none';
-      // document.getElementById('button-leave').style.display = 'inline';
-
-      // Draw local video, if not already previewing
-      // var previewContainer = this.$refs.preview;
-      // if (!previewContainer.querySelector('video')) {
-      //   this.attachParticipantTracks(room.localParticipant, previewContainer);
-      // }
-
-      room.participants.forEach((participant) => {
-        console.log("Already in Room: '" + participant.identity + "'");
-        var previewContainer = this.$refs.remoteMedia;
-        this.attachParticipantTracks(participant, previewContainer);
-      });
 
       // When a participant joins, draw their video on screen
       room.on('participantConnected', function(participant) {
@@ -146,8 +119,6 @@ Vue.component('video-chat', {
       room.on('trackAdded', (track, participant) => {
         this.activeRoomChangeTracker += 1;
         console.log(participant.identity + " added track: " + track.kind);
-        var previewContainer = this.$refs.remoteMedia;
-        this.attachTracks([track], previewContainer);
       });
 
       room.on('trackRemoved', (track, participant) => {
@@ -172,8 +143,6 @@ Vue.component('video-chat', {
         room.participants.forEach(this.detachParticipantTracks);
         Object.assign(this.$data, this.$options.data.apply(this));
         this.refreshToken();
-        // document.getElementById('button-join').style.display = 'inline';
-        // document.getElementById('button-leave').style.display = 'none';
       });
     },
 
@@ -228,11 +197,6 @@ Vue.component('video-chat', {
   },
   computed: {
     participants: function(){
-      console.log("Re-computing participantTracks");
-      // if(!this.activeRoom || this.activeRoom.participants.size <= 0){
-      //   return null;
-      // }
-      console.log(this.activeRoom.localParticipant);
       return this.activeRoomChangeTracker && Array.from(this.activeRoom.participants.values());
     }
   },
