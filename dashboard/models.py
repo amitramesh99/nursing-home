@@ -174,7 +174,7 @@ class UserUploadedDocument(models.Model):
     document = models.FileField(upload_to='uploads/')
 
     def __str__(self):
-        return document.name
+        return self.document.name
 
 class NoteEntry(models.Model):
     created_at = models.DateTimeField(auto_now=True)
