@@ -8,17 +8,54 @@
 
 {% block content %}
 
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-white px-4 shadow-sm">
+    <a class="navbar-brand text-dark" href="{% url 'family-portal' %}">
+      <img src="{% static 'portal/css/acrusis_logo.png' %}" width="130" 130height="39">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample04">
+
+      <ul class="navbar-nav my-2 my-md-0 ml-auto">
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link d-inline text-dark font-weight-bold">Account</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
 <main role="main">
-  <div style="width:70%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-2 px-0 bg border-right">
         <div class="pt-3 sticky-top">
 
           <ul class="list-group rounded-0 patient-list">
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/dashboard/' %}current-item{% endif %}" href="{% url 'family-dashboard' %}" style="font-size:20px;font-weight:bold;">Home</a>
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/metrics/' %}current-item{% endif %}" href="{% url 'vital_hub' %}" style="font-size:20px;font-weight:bold;">Health</a>
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/medications/' %}current-item{% endif %}" href="{% url 'wellbeing' %}" style="font-size:20px;font-weight:bold;">Wellbeing</a>
-            <a class="list-group-item list-group-item-action border-0 {% if request.get_full_path == '/messages/' %}current-item{% endif %}" href="{% url 'activities' %}" style="font-size:20px;font-weight:bold;">Messages</a>
+            <a class="list-group-item list-group-item-action border-0 tab-title font-weight-bold {% if request.get_full_path == '/portal/' %}current-item{% endif %}" href="{% url 'family-portal' %}">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+              </svg>
+              Home
+            </a>
+            <a class="list-group-item list-group-item-action border-0 tab-title font-weight-bold text-dark {% if request.get_full_path == '/portal/vitals' %}current-item{% endif %}" href="{% url 'vital_hub' %}">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-journals" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2z"/>
+                <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2zM1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+              </svg>
+              Hub
+            </a>
+            <a class="list-group-item list-group-item-action border-0 tab-title font-weight-bold text-dark {% if request.get_full_path == '/portal' %}current-item{% endif %}" href="{% url 'family-portal' %}">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-left-dots" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+              Communication
+            </a>
           </ul>
         </div>
       </div>

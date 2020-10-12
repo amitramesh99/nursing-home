@@ -31,7 +31,7 @@ def activities(request):
     })
 
 def vital_hub(request):
-    metric_models = [BloodSugarEntry, BloodPresureEntry, PulseEntry, TemperatureEntry, WeightEntry]
+    metric_models = [BloodSugarEntry, BloodPressureEntry, PulseEntry, TemperatureEntry, WeightEntry]
     daily_metrics = []
     patientId = 1
     for model in metric_models:
@@ -41,10 +41,12 @@ def vital_hub(request):
             pass
 
     current_prescriptions = Medication.objects.filter(patient=patientId)
+    activity_list = ActivityEntry.objects.filter(patient=patientId)
 
     return render(request, 'console/vital_hub.html', {
         'metrics': daily_metrics,
-        'current_prescriptions': current_prescriptions
+        'current_prescriptions': current_prescriptions,
+        'activity_list': activity_list
     })
 
 def wellbeing(request):

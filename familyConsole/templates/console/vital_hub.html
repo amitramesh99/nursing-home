@@ -29,9 +29,79 @@
         {% endfor %}
       </ul>
     </div>
+
+    <br>
+
+    <div class="card">
+      <div class="d-flex w-100 justify-content-between card-body">
+        <h2>Nutrition</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h5 class="mb-1">Diet:
+                <small>Low Fat</small>
+              </h5>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h5 class="mb-1">Method of Eating:
+                <small>Assisted</small>
+              </h5>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <br>
+
+    <div class="card">
+      <div class="d-flex w-100 justify-content-between card-body">
+        <h2>Current Prescriptions</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for prescription in current_prescriptions %}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <h5 class="mb-1">{{ prescription.name }}
+                <small>{{ prescription.dosage }}</small>
+              </h5>
+            </div>
+            <div class="col-md-5 my-auto">
+              <h5 class="mb-0">2 per day</h5>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <br>
   </div>
 
   <div class="col container" id="accordion">
+    <div class="card">
+      <div class="d-flex w-100 justify-content-between card-body">
+        <h2>Recent Activities</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for activity in activity_list %}
+        <li class="list-group-item activity-entry intensity-{{activity.intensity}}">
+          <h5 class="mb-1">{{ activity.name }}</h5>
+          <small class="text-muted">Latest Updated {{ activity.created_at }}</small>
+          <p class="mb-0">{{ activity.description }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <br>
+
     <div class="card">
       <div class="d-flex w-100 justify-content-between card-body">
         <h2>Medication History</h2>
@@ -109,30 +179,6 @@
           All medications taken!
         </div>
       </div>
-    </div>
-
-    <br>
-
-    <div class="card">
-      <div class="d-flex w-100 justify-content-between card-body">
-        <h2>Current Prescriptions</h2>
-      </div>
-      <ul class="list-group list-group-flush">
-        {% for prescription in current_prescriptions %}
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col">
-              <h5 class="mb-1">{{ prescription.name }}
-                <small>{{ prescription.dosage }}</small>
-              </h5>
-            </div>
-            <div class="col-md-5 my-auto">
-              <h5 class="mb-0">2 per day</h5>
-            </div>
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
     </div>
   </div>
 </div>

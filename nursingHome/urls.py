@@ -41,7 +41,7 @@ urlpatterns = [
     path('dashboard/patient/<int:patientId>/chat', dashboard_views.patient_chat, name='patient-chat'),
 
     # family view
-    path('portal/', family_views.dashboard, name='family-dashboard'),
+    path('portal/', family_views.dashboard, name='family-portal'),
     path('portal/vitals', family_views.vital_hub, name='vital_hub'),
     path('portal/wellbeing', family_views.wellbeing, name='wellbeing'),
     path('portal/medications/', family_views.medications, name='medications'),

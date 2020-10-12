@@ -22,25 +22,71 @@ class CreatePatientAPIView(generics.CreateAPIView):
 class CreateRetrieveNotesAPIView(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
 
-    def post(self, request, *args, **kwargs):
-        _mutable = request.data._mutable
-        request.data._mutable = True
-        request.data['patient'] = self.kwargs['patient']
-        _mutable = False
-        return self.create(request, *args, **kwargs)
+    #def post(self, request, *args, **kwargs):
+    #    print('reached')
+    #    _mutable = request.data._mutable
+    #    request.data._mutable = True
+    #    request.data['patient'] = self.kwargs['patient']
+    #    _mutable = False
+    #    return self.create(request, *args, **kwargs)
 
     def get_queryset(self):
-        return NoteEntry.objects.filter(patient=self.kwargs['patient'])
+        return reversed(NoteEntry.objects.filter(patient=self.kwargs['patient']).order_by('-created_at')[:3])
 
 class CreateRetrieveActivitiesAPIView(generics.ListCreateAPIView):
     serializer_class = ActivitySerializer
 
+    '''
     def post(self, request, *args, **kwargs):
         _mutable = request.data._mutable
         request.data._mutable = True
         request.data['patient'] = self.kwargs['patient']
         _mutable = False
         return self.create(request, *args, **kwargs)
+    '''
 
     def get_queryset(self):
-        return ActivityEntry.objects.filter(patient=self.kwargs['patient'])
+        # Returns 3 most recent activities
+        return reversed(ActivityEntry.objects.filter(patient=self.kwargs['patient']).order_by('-created_at')[:3])
+
+class RetrieveBloodSugarView(generics.RetrieveAPIView):
+    serializer_class = BloodSugarSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return BloodSugarEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')
+
+class RetrieveBloodPressureView(generics.RetrieveAPIView):
+    serializer_class = BloodPressureSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return BloodPressureEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')
+
+class RetrieveBloodSugarView(generics.RetrieveAPIView):
+    serializer_class = BloodSugarSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return BloodSugarEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')
+
+class RetrievePulseView(generics.RetrieveAPIView):
+    serializer_class = PulseSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return PulseEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')
+
+class RetrieveTemperatureView(generics.RetrieveAPIView):
+    serializer_class = TemperatureSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return TemperatureEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')
+
+class RetrieveWeightView(generics.RetrieveAPIView):
+    serializer_class = WeightSerializer
+    lookup_field = 'patient'
+
+    def get_object(self):
+        return WeightEntry.objects.filter(patient=self.kwargs['patient']).latest('created_at')

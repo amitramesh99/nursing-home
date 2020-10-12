@@ -92,7 +92,7 @@ def patient_profile(request, patientId):
     except:
         daily_living_completed = []
 
-    metric_models = [BloodSugarEntry, BloodPresureEntry, PulseEntry, TemperatureEntry, WeightEntry]
+    metric_models = [BloodSugarEntry, BloodPressureEntry, PulseEntry, TemperatureEntry, WeightEntry]
 
     daily_metrics = []
     for model in metric_models:

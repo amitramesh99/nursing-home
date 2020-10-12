@@ -1,9 +1,54 @@
-.patient-list{
-  background-color: black;
+.bg-black{
+  background-color: #222;
   color: white;
 }
 
-.current-item{
-  background-color: black;
+.bg-white{
+  background-color: #FFFFFF;
+  color: black;
+}
+
+.bg-green{
+  background-color: #006020;
   color: white;
+}
+
+.text-black{
+  color: black;
+}
+
+.current-item{
+  color: #00ad3a !important;
+}
+
+.list-group-item.feed-entry{
+  border-left-width: 10px;
+}
+
+.list-group-item.activity-entry{
+  border-left-width: 10px;
+}
+
+.list-group-item.activity-entry.intensity-l{
+  border-left-color: #009933;
+}
+
+.list-group-item.activity-entry.intensity-m{
+  border-left-color: #ff9900;
+}
+
+.list-group-item.activity-entry.intensity-a{
+  border-left-color: #cc3300;
+}
+
+.list-group-item.feed-entry.intensity-medium{
+  border-left-color: #ff9900;
+}
+
+.list-group-item.feed-entry.intensity-high{
+  border-left-color: #cc3300;
+}
+
+.tab-title{
+  font-size:20px;
 }

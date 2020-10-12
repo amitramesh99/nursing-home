@@ -68,7 +68,7 @@ class BloodSugarEntry(MetricEntry):
     LABEL = 'Blood Sugar'
     UNIT = 'mg/dL'
 
-class BloodPresureEntry(MetricEntry):
+class BloodPressureEntry(MetricEntry):
     LABEL = 'Blood Pressure'
     UNIT = 'mm Hg'
 

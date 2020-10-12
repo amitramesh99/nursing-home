@@ -109,6 +109,7 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
 
                 <button type="submit" class="btn btn-dark btn">Update</button>
@@ -121,33 +122,25 @@
               <div class="mb-3">
                 <label for="validationTextarea"><h4>General Notes</h4></label>
 
-                <div class="list-group mb-3">
+                <div class="list-group mb-3" id="app-2">
 
-                  <div class="list-group-item">
+                  <div class="list-group-item" v-for="note in notes">
                     <div class="d-flex w-100 justify-content-between">
-                      <small class="mb-1">Entered by John Doe</small>
-                      <small>11:24 a.m.</small>
+                      <small class="mb-1">[[ note.category ]] [ [[note.severity]] ]</small>
+                      <small>[[ note.created_at ]]</small>
                     </div>
-                    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                  </div>
-
-                  <div class="list-group-item">
-                    <div class="d-flex w-100 justify-content-between">
-                      <small class="mb-1">Entered by Johnny Appleseed</small>
-                      <small>9:43 a.m.</small>
-                    </div>
-                    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                    <p class="mb-1">[[ note.notes ]]</p>
                   </div>
 
                 </div>
-                <form action="{% url 'api-patients:notes' patient.id %}" method="post">
+                <form @submit.prevent="postNote" id="add-note">
                   {% csrf_token %}
-                  <textarea class="form-control" id="validationTextarea" name="notes" placeholder="Patient notes..."></textarea>
+                  <textarea class="form-control" id="note_description" v-model='description' name="notes" placeholder="Patient notes..."></textarea>
                   <br>
                   <div class="row">
                     <div class="col">
-                      <select class="custom-select required-field" id="category" name="category">
-                        <option selected>Choose Category...</option>
+                      <select class="custom-select required-field" id="category" name="category" v-model="category">
+                        <option value="default">Choose Category...</option>
                         <option value="Activities">Activities</option>
                         <option value="Living">Living</option>
                         <option value="Meals">Meals</option>
@@ -157,8 +150,8 @@
                       </select>
                     </div>
                     <div class="col">
-                      <select class="custom-select" id="severity" name="severity">
-                        <option selected>Choose Severity...</option>
+                      <select class="custom-select" id="severity" name="severity" v-model='severity'>
+                        <option value="default">Choose Severity...</option>
                         <option value="Low">Low</option>
                         <option value="Moderate">Moderate</option>
                         <option value="High">High</option>
@@ -203,84 +196,107 @@
               <button class="btn btn-lg btn-dark">Update</button>
             </div>
             <ul class="list-group list-group-flush">
-              {% for metric in metrics %}
-              <li class="list-group-item">
-                <div class="row">
+              <li class="list-group-item" v-for="metric in metrics">
+                <div class="row w-100">
                   <div class="col">
-                    <h5 class="mb-1">{{ metric.LABEL }}</h5>
-                    <small class="text-muted">Last Updated {{ metric.created_at }}</small>
+                    <h5 class="mb-1">[[ metric.LABEL ]]</h5>
+                    <small class="text-muted">Last Updated [[ metric.created_at ]]</small>
                   </div>
                   <div class="col-md-5 my-auto">
-                    <h5 class="mb-0">{{ metric.entry }} <small>{{ metric.unit }}</small></h5>
+                    <h5 class="mb-0">[[ metric.entry ]] <small>[[ metric.UNIT ]]</small></h5>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-secondary" style="display: none">Edit</button>
                   </div>
                 </div>
               </li>
-              {% endfor %}
             </ul>
           </div>
-
         </div>
         <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
           <div class="card">
             <div class="d-flex w-100 justify-content-between card-body">
               <h2>Recent Activities</h2>
-              <button class="btn btn-lg btn-dark">Add New</button>
             </div>
             <ul class="list-group list-group-flush">
-              {% for activity in activity_list %}
-              <li class="list-group-item activity-entry intensity-{{activity.intensity}}">
-                <h5 class="mb-1">{{ activity.name }}</h5>
-                <small class="text-muted">Latest Updated {{ activity.created_at }}</small>
-                <p class="mb-0">{{ activity.description }}</p>
+              <li class="list-group-item activity-entry intensity-{{activity.intensity}}" v-for="activity in activities">
+                <h5 class="mb-1">[[ activity.name ]]</h5>
+                <small class="text-muted">Latest Updated [[ activity.created_at ]]</small>
+                <p class="mb-0">[[ activity.description ]]</p>
               </li>
-              {% endfor %}
             </ul>
           </div>
-
-        </div>
-        <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-          <div class="row">
-            <div class="col">
-              <h4 align="center">Nutrition</h4>
-              <div class="row">
-                <div class="form-check col" align="center">
-                  <h6>Diet Type</h6>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">High Protein</label>
-                  </div>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Soft Foods</label>
-                  </div>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Low Fat</label>
-                  </div>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Low Sodium</label>
-                  </div>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Liquid Foods</label>
-                  </div>
-                </div>
-                <div class="form-check col" align="center">
-                  <h6>Method of Eating</h6>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Self-fed</label>
-                  </div>
-                  <div>
-                    <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
-                    <label class="form-check-label" for="a">Assisted</label>
-                  </div>
-                </div>
+          <form @submit.prevent="postActivity">
+            {% csrf_token %}
+            <br>
+            <div class="row">
+              <div class="col-6">
+                <input class="form-control" id="activity_description" v-model='activityName' name="activityName" placeholder="Activity Name"></input>
+              </div>
+              <div class="col-6">
+                <select class="custom-select" id="intensity" name="intensity" v-model='intensity'>
+                  <option value="default">Choose Intensity...</option>
+                  <option value="l">Low</option>
+                  <option value="m">Moderate</option>
+                  <option value="a">Active</option>
+                </select>
               </div>
             </div>
-            <div class="col">
-              <h4 align="center">Prescriptions</h4>
+            <br>
+            <textarea class="form-control" id="activity_description" v-model='description' name="activityDescription" placeholder="Describe Activity..."></textarea>
+            <br>
+            <button type="submit" class="btn btn-dark btn">Add Activity</button>
+          </form>
+
+        </div>
+
+        <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h4>Nutrition</h4>
+                  <div class="row">
+                    <div class="form-check col">
+                      <h6>Diet Type</h6>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">High Protein</label>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Soft Foods</label>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Low Fat</label>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Low Sodium</label>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Liquid Foods</label>
+                      </div>
+                    </div>
+                    <div class="form-check col">
+                      <h6>Method of Eating</h6>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Self-fed</label>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" name="living" name="meal" id="a" value="a">
+                        <label class="form-check-label" for="a">Assisted</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <h4>Prescriptions</h4>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -306,5 +322,6 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://media.twiliocdn.com/sdk/js/chat/releases/4.0.0/twilio-chat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="{% static 'dashboard/js/patient_profile.js' %}"></script>
 <script src="{% static 'dashboard/js/nurse_chat.js' %}"></script>
 {% endblock %}
