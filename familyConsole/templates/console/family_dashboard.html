@@ -49,7 +49,7 @@
               </svg>
               Hub
             </a>
-            <a class="list-group-item list-group-item-action border-0 tab-title font-weight-bold text-dark {% if request.get_full_path == '/portal' %}current-item{% endif %}" href="{% url 'family-portal' %}">
+            <a class="list-group-item list-group-item-action border-0 tab-title font-weight-bold text-dark {% if request.get_full_path == '/communication/' %}current-item{% endif %}" href="{% url 'communication' %}">
               <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-left-dots" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v11.586l2-2A2 2 0 0 1 4.414 11H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                 <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
@@ -61,16 +61,7 @@
       </div>
       <div class="col pt-3">
         {% block main %}
-    		<div align="center">
-          <h3>Create Patient</h3>
-          <form action="/" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <input id="your_name" class="form-control" type="text" name="your_name" placeholder="Name" value="{{ current_name }}" style="width:50%">
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-          </form>
-    		</div>
+
         {% endblock %}
       </div>
     </div>
@@ -80,5 +71,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
+
 {% endblock %}

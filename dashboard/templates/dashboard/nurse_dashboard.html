@@ -71,7 +71,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'dashboard/js/nurse_dashboard.js' %}"></script>
 <script src="https://unpkg.com/vue"></script>
 <script type='text/javascript'>
   var patients = {{ patient_list_json|safe }};

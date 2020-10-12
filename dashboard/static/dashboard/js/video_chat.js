@@ -4,10 +4,16 @@ Vue.component('video-chat', {
     return{
       token: null,
       params: {},
-      VID: '',
       VIDInput: '',
       previewTracks: null,
-      activeRoom: null,
+      isMuted: false,
+      isVideoOff: false,
+      activeRoom: {
+        participants: {},
+        state: '',
+        localParticipant: {},
+      },
+      activeRoomChangeTracker: 0,
     }
   },
   created: function(){
@@ -53,18 +59,6 @@ Vue.component('video-chat', {
     refreshToken: function() {
       return axios.get('/token/video').then((response) => this.token = response.data);
     },
-    attachTracks: function(tracks, container) {
-      tracks.forEach(function(track) {
-        container.appendChild(track.attach());
-      });
-    },
-    attachParticipantTracks: function(participant, container) {
-      console.log(participant.tracks);
-      console.log(participant.tracks.values());
-
-      var tracks = Array.from(participant.tracks.values());
-      this.attachTracks(tracks, container);
-    },
     detachTracks: function(tracks) {
       tracks.forEach(function(track) {
         track.detach().forEach(function(detachedElement) {
@@ -74,7 +68,7 @@ Vue.component('video-chat', {
     },
     detachParticipantTracks: function(participant) {
       var tracks = Array.from(participant.tracks.values());
-      detachTracks(tracks);
+      this.detachTracks(tracks);
     },
     // button event handlers
     previewVideoHandler: function(){
@@ -95,7 +89,6 @@ Vue.component('video-chat', {
       });
     },
     joinCallFormSubmit: function(e){
-      e.preventDefault();
       if(this.VIDInput){
         var connectOptions = { name: this.VIDInput, logLevel: 'error' };
         if (this.previewTracks) {
@@ -116,39 +109,27 @@ Vue.component('video-chat', {
       this.activeRoom = room;
 
       console.log("Joined room sucessfully");
-      // document.getElementById('button-join').style.display = 'none';
-      // document.getElementById('button-leave').style.display = 'inline';
-
-      // Draw local video, if not already previewing
-      var previewContainer = this.$refs.preview;
-      if (!previewContainer.querySelector('video')) {
-        this.attachParticipantTracks(room.localParticipant, previewContainer);
-      }
-
-      room.participants.forEach((participant) => {
-        console.log("Already in Room: '" + participant.identity + "'");
-        var previewContainer = this.$refs.remoteMedia;
-        this.attachParticipantTracks(participant, previewContainer);
-      });
 
       // When a participant joins, draw their video on screen
       room.on('participantConnected', function(participant) {
-        console.log("Joining: '" + participant.identity + "'");
+        this.activeRoomChangeTracker += 1;
+        console.log("Joining: '" + participant.identity + "'");        
       });
-
+      
       room.on('trackAdded', (track, participant) => {
+        this.activeRoomChangeTracker += 1;
         console.log(participant.identity + " added track: " + track.kind);
-        var previewContainer = this.$refs.remoteMedia;
-        this.attachTracks([track], previewContainer);
       });
 
       room.on('trackRemoved', (track, participant) => {
+        this.activeRoomChangeTracker += 1;
         console.log(participant.identity + " removed track: " + track.kind);
         this.detachTracks([track]);
       });
 
       // When a participant disconnects, note in log
       room.on('participantDisconnected', (participant) => {
+        this.activeRoomChangeTracker += 1;
         console.log("Participant '" + participant.identity + "' left the room");
         this.detachParticipantTracks(participant);
       });
@@ -156,29 +137,77 @@ Vue.component('video-chat', {
       // When we are disconnected, stop capturing local video
       // Also remove media for all remote participants
       room.on('disconnected', () => {
+        this.activeRoomChangeTracker += 1;
         console.log('Left');
         this.detachParticipantTracks(room.localParticipant);
-        room.participants.forEach(detachParticipantTracks);
-        this.activeRoom = null;
-        // document.getElementById('button-join').style.display = 'inline';
-        // document.getElementById('button-leave').style.display = 'none';
+        room.participants.forEach(this.detachParticipantTracks);
+        Object.assign(this.$data, this.$options.data.apply(this));
+        this.refreshToken();
       });
     },
-
 
     leaveRoomIfJoined: function(){
       // todo
       alert("Leaving call");
     },
+
+    //Controls:
+    getButtonClass: function(isActive){
+      return isActive ? 'btn-danger': 'btn-success';
+    },
+
+    toggleMute: function(){
+      let audioTracks = this.activeRoom.localParticipant.audioTracks;
+
+      if(this.isMuted){
+        audioTracks.forEach(function(track, trackId) {
+          track.enable();
+        });
+      }
+      else{
+        audioTracks.forEach(function(track, trackId) {
+          track.disable();
+        });
+      }
+
+      this.isMuted = !this.isMuted;
+    },
+
+    toggleVideo: function(){
+      let videoTracks = this.activeRoom.localParticipant.videoTracks;
+
+      if(this.isVideoOff){
+        videoTracks.forEach(function(track, trackId) {
+          track.enable();
+        });
+      }
+      else{
+        videoTracks.forEach(function(track, trackId) {
+          track.disable();
+        });
+      }
+
+      this.isVideoOff = !this.isVideoOff;
+    },
+
+    leaveCall: function(){
+      console.log("Leaving call...");
+      this.activeRoom.disconnect();
+    },
+  },
+  computed: {
+    participants: function(){
+      return this.activeRoomChangeTracker && Array.from(this.activeRoom.participants.values());
+    }
   },
   template: `
-    <div class="container-fluid bg-light">
-      <div class="row py-4">
+    <div class="container-fluid h-100">
+      <div v-if="!activeRoom.state" class="row h-100 align-items-center">
         <div class="col">
 
-          <div class="my-5 mx-auto" style="width:500px;" ref="joinCallForm">
-            <h2>Join Video Call</h2>
-            <form @submit="joinCallFormSubmit" autocomplete="off" class="form-inline">
+          <div class="my-2 mx-auto" style="width:500px;" ref="joinCallForm">
+            <h1 class="mb-4">Join an Acrusis Video Call</h1>
+            <form @submit.prevent="joinCallFormSubmit" alutocomplete="off" class="form-inline justify-content-center">
               <input v-model="VIDInput" placeholder="Enter your call ID" name="vid" class="form-control form-control-lg mr-2"></input>
               <button class="btn btn-lg btn-primary" type="submit">
                 Join Call
@@ -189,26 +218,110 @@ Vue.component('video-chat', {
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <div class="my-5 mx-auto" style="width:500px;" ref="joinCallForm">
+      <div v-else class="row h-100">
+        <div class="col h-100 px-0">
+          <div ref="remoteMedia" class="h-100 bg-dark">
+            <video-grid
+              v-bind:participants="participants"
+            ></video-grid>
+            <div id="previewVideoContainer">
+              <video-stream v-bind:participant="activeRoom.localParticipant"></video-stream>
+            </div>
+            <div id="videoControlsContainer" class="justify-content-between">
+              <button class="btn btn-lg" @click="toggleMute" :class="getButtonClass(isMuted)">
+                <span class="fa fa-microphone-slash"></span>
+              </button>
+              <button class="btn btn-lg" @click="toggleVideo" :class="getButtonClass(isVideoOff)">
+                <span class="fa fa-video-camera"></span>
+              </button>
+              <button class="btn btn-lg btn-secondary" @click="leaveCall">
+                <span class="fa fa-times"></span>
+              </button>
 
-            <div ref="preview" id="previewVideoContainer" style="height: 202px; width:270px" class="bg-dark"></div>
-            <button @click="previewVideoHandler" class="btn btn-secondary mt-2">Preview Video</button>
-
+              </div>
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col">
-          <div ref="remoteMedia" style="height: 500px; width:1200px"></div>
-        </div>
-      </div>
-
     </div>
   `,
 });
+
+Vue.component('video-grid', {
+  delimiters: ['[[', ']]'],
+  props: ['participants'],
+  computed: {
+    participantMatrix: function(){
+      let n = this.participants.length;
+      let numRows = Math.round(Math.sqrt(n));
+      let numCols = Math.ceil(Math.sqrt(n));
+
+      var matrix = [];
+      for(i=0; i<numRows; i++){
+        let startIndex = i * numCols;
+        let endIndex = (startIndex + numCols);
+        matrix.push(this.participants.slice(startIndex, endIndex));
+      }
+      return matrix;
+
+    },
+    displayWaitingMessage: function(){
+      console.log("partcipant change fired");
+      return !(this.participants && this.participants.length > 0);
+    },
+
+  },
+  beforeMount: function(){
+    // alert("Before mount");
+  },
+  //TODO: 
+  // * Rows not working as expected inside flex container
+  // * Video keeps resizing during call
+  // * Video not taking up full size of container
+  template: `
+    <div class="h-100">
+      <div class="row" v-for="row in participantMatrix">
+        <div class="col" v-for="participant in row">
+          <div class="embed-responsive embed-responsive-16by9">
+            <video-stream v-bind:participant="participant"></video-stream>
+          </div>
+        </div>
+      </div>
+      <div v-if="displayWaitingMessage" class="h-100 d-flex align-items-center justify-content-center">
+        <h3 class="text-light">Waiting for participants to join...</h3>
+      </div>
+    </div>
+  `,
+  
+
+});
+
+Vue.component('video-stream', {
+  delimiters: ['[[', ']]'],
+  props: ['participant'],
+  methods: {
+    attachTracks: function(tracks, container) {
+      tracks.forEach(function(track) {
+        container.appendChild(track.attach());
+      });
+    },
+  },
+  mounted: function(){
+    console.log("Mounted video stream");
+    if(this.participant){
+      let container = this.$refs[this.participant.identity];
+      let tracks = Array.from(this.participant.tracks.values());
+      this.attachTracks(tracks, container);
+    }
+    else{
+      console.log("No participant");
+    }
+
+  },
+  template: `
+    <div v-if="participant" :ref="participant.identity" class="video-container"></div>
+  `,
+});
+
 const videoChatWidget = new Vue({
   el: '#video-chat',
 });

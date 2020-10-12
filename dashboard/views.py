@@ -41,7 +41,6 @@ def nurse_dashboard(request):
 
 @user_passes_test(is_nurse)
 def patient_profile(request, patientId):
-    print(request.POST)
     if request.method == 'POST':
         medication_entries = request.POST.getlist('medications')
 
@@ -141,7 +140,7 @@ def patient_chat(request, patientId):
         'patient_json': patient_json,
     })
 
-
+@login_required
 def video_conference(request):
     return render(request, 'dashboard/video_chat.html')
 

@@ -2,14 +2,37 @@
 {% load static %}
 
 {% block stylesheets %}
+<link rel="stylesheet" href="{% static 'dashboard/css/nurse_dashboard.css' %}">
 <link rel="stylesheet" href="{% static 'dashboard/css/video_chat.css' %}">
 
 {% endblock %}
 
 {% block content %}
-<div id="video-chat">
-  <video-chat></video-chat>
-</div>
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-black px-4 shadow-sm">
+    <a class="navbar-brand" href="{% url 'nurse-dashboard' %}">
+      <strong>Acrusis<span class="text-muted"> beta</span></strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample04">
+
+      <ul class="navbar-nav my-2 my-md-0 ml-auto">
+        <li class="nav-item">
+          Welcome, {{ user.username }}! <a href="{% url 'logout' %}" class="nav-link d-inline">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main role="main" class="bg-light">
+  <div id="video-chat" style="min-height:200px; height: calc(100vh - 56px);">
+    <video-chat></video-chat>
+  </div>
+</main>
 {% endblock %}
 
 {% block scripts %}
