@@ -14,6 +14,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoteEntry
         fields = [
+            'patient',
             'notes',
             'category',
             'severity',
@@ -24,6 +25,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityEntry
         fields = [
+            'patient',
             'name',
             'description',
             'intensity',

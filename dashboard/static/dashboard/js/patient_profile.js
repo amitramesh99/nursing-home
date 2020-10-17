@@ -20,10 +20,8 @@ var app2 = new Vue({
       axios.get(api_url)
         .then((response) => {
           this.notes = response.data;
-          //this.loading = false;
         })
         .catch((err) => {
-          //this.loading = false;
           console.log(err);
         })
     },
@@ -34,14 +32,6 @@ var app2 = new Vue({
       const severity = document.getElementById('severity').value;
       console.log(category);
       console.log(severity);
-
-      //axios.post(api_url, {
-      //  note: this.new_note,
-      //  severity: this.severity,
-      //  category: this.category,
-
-
-      //})
     }
   },
   mounted() {
@@ -61,11 +51,6 @@ var app = new Vue({
     postNote: function() {
       console.log('Reached')
       let api_url = '/api/patients/notes/1';
-      //const category = document.getElementById('category').value;
-      //const severity = document.getElementById('severity').value;
-      console.log(this.category);
-      console.log(this.severity);
-      console.log(this.description)
       axios.defaults.xsrfCookieName = 'csrftoken';
       axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -90,7 +75,7 @@ var app = new Vue({
 })
 
 var app3 = new Vue({
-  el: '#list-profile',
+  el: '#activities-section',
   delimiters: ['[[', ']]'],
   data: {
     activities: [],

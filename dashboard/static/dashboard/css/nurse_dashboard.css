@@ -69,3 +69,34 @@ a.header-link:focus,{
 .list-group-item.activity-entry.intensity-a{
   border-left-color: #cc3300;
 }
+
+.Low{
+  border-left-width: 10px;
+  border-left-color: #009933;
+}
+
+.l{
+  border-left-width: 10px;
+  border-left-color: #009933;
+}
+
+.Moderate{
+  border-left-width: 10px;
+  border-left-color: #ff9900;
+}
+
+.m{
+  border-left-width: 10px;
+  border-left-width: 10px;
+  border-left-color: #ff9900;
+}
+
+.High{
+  border-left-width: 10px;
+  border-left-color: #cc3300;
+}
+
+.a{
+  border-left-width: 10px;
+  border-left-color: #cc3300;
+}
