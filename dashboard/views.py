@@ -18,7 +18,7 @@ def home(request):
         return redirect('nurse-dashboard')
 
     if hasattr(request.user, 'authorizedViewer'):
-        return redirect('family-dashboard')
+        return redirect('family-portal')
 
     return HttpResponse('Error: User is not nurse or family member') # todo: handle this case
 
