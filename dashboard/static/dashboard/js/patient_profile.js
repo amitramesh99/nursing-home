@@ -14,6 +14,9 @@ var app2 = new Vue({
 
   },
   methods: {
+    moment: function(){
+      return moment();
+    },
     getNotes: function() {
       console.log('Started')
       let api_url = '/api/patients/notes/1';
@@ -36,7 +39,12 @@ var app2 = new Vue({
   },
   mounted() {
     this.getNotes()
-  }
+  },
+  filters: {
+    timeFromNow: function(date) {
+      return moment(date).fromNow();
+    }
+  },
 })
 
 var app = new Vue({
@@ -84,6 +92,9 @@ var app3 = new Vue({
     intensity: 'default'
   },
   methods: {
+    moment: function(){
+      return moment();
+    },
     getActivities: function () {
       console.log('Readched app3');
       let api_url = '/api/patients/activities/1';
@@ -119,7 +130,12 @@ var app3 = new Vue({
   },
   mounted() {
     this.getActivities()
-  }
+  },
+  filters: {
+    timeFromNow: function(date) {
+      return moment(date).fromNow();
+    }
+  },
 })
 
 
@@ -130,6 +146,9 @@ var app4 = new Vue({
     metrics: []
   },
   methods: {
+    moment: function(){
+      return moment();
+    },
     getMetrics: function () {
       console.log('REACHED THIS ONE');
       var metrics = ['blood-sugar', 'pulse', 'temp', 'weight']
@@ -163,5 +182,10 @@ var app4 = new Vue({
   },
   mounted() {
     this.getMetrics()
-  }
+  },
+  filters: {
+    timeFromNow: function(date) {
+      return moment(date).fromNow();
+    }
+  },
 })

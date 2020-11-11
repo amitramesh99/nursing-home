@@ -123,8 +123,8 @@
 
                   <div class="list-group-item" v-bind:class="[[ note.severity ]]" v-for="note in notes">
                     <div class="d-flex w-100 justify-content-between">
-                      <small class="mb-1">[[ note.category ]] [ [[note.severity]] ]</small>
-                      <small>[[ note.created_at ]]</small>
+                      <h5 class="mb-1">[[ note.category ]] [ [[note.severity]] ]</h5>
+                      <small>[[ note.created_at | timeFromNow ]]</small>
                     </div>
                     <p class="mb-1">[[ note.notes ]]</p>
                   </div>
@@ -197,7 +197,7 @@
                 <div class="row w-100">
                   <div class="col">
                     <h5 class="mb-1">[[ metric.LABEL ]]</h5>
-                    <small class="text-muted">Last Updated [[ metric.created_at ]]</small>
+                    <small class="text-muted">Last Updated [[ metric.created_at | timeFromNow ]]</small>
                   </div>
                   <div class="col-md-5 my-auto">
                     <h5 class="mb-0">[[ metric.entry ]] <small>[[ metric.UNIT ]]</small></h5>
@@ -218,7 +218,7 @@
             <ul class="list-group">
               <li class="list-group-item" v-bind:class="[[ activity.intensity ]]" v-for="activity in activities">
                 <h5 class="mb-1">[[ activity.name ]]</h5>
-                <small class="text-muted">Latest Updated [[ activity.created_at ]]</small>
+                <small class="text-muted">Latest Updated [[ activity.created_at | timeFromNow ]]</small>
                 <p class="mb-0">[[ activity.description ]]</p>
               </li>
             </ul>
